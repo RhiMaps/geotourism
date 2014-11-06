@@ -1,5 +1,5 @@
-var z = 9;
-var myLL = L.latLng(43.31,2.10);
+var z = 10;
+var myLL = L.latLng(43.03,2.48);
 
 
 
@@ -27,13 +27,35 @@ var mapqLayer = L.tileLayer('http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.pn
 // var offices_layer = 1;
 
 
+function onEachFeature(feature, layer) {
+    // does this feature have a property named popupContent?
+    var popupcontent="default";
+    if (feature.properties){
+        if ( feature.properties.name) {
+            popupcontent="name: "+feature.properties.name+"</br>";
+        }
+        if ( feature.properties.tourism){
+            popupcontent+="tourism: "+feature.properties.tourism;
+        }
+    }
+    layer.bindPopup(popupcontent);
+}
+
 var tourismeaude = L.geoJson( tourismeaude,{
+        onEachFeature: onEachFeature,
         pointToLayer: function (feature, latlng) {
             var color;
             switch( feature.properties.tourism ){
-                case 'camp_site': color= "#0f0";
-                case 'hotel': color= "#ff0";
-                case '': color= "#ff0";
+                case 'camp_site': color= "#0f0";break;
+                case 'hotel': color= "#ff0";break;
+                case 'information': color= "#0ff";break;
+                case 'picnic_site': color= "#f0f";break;
+                case 'attraction': color= "#B45F04";break;
+                case 'chalet': color= "#DF013A";break;
+                case 'guest_house': color= "#A901DB";break;
+                case 'viewpoint': color= "#3A01DF";break;
+                case 'museum': color= "#0174DF";break;
+                case 'artwork': color= "#D7DF01";break;
                 default: color= "#ff7800";
             }
             var geojsonMarkerOptions = {
