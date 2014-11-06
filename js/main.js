@@ -1,5 +1,6 @@
-var z = 7;
-var myLL = L.latLng(46.725,1.785);
+var z = 9;
+var myLL = L.latLng(43.31,2.10);
+
 
 
 // create a map in the "map" div, set the view to a given place and zoom
@@ -26,7 +27,26 @@ var mapqLayer = L.tileLayer('http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.pn
 // var offices_layer = 1;
 
 
-var tourismeaude = L.geoJson( tourismeaude ).addTo(map); 
+var tourismeaude = L.geoJson( tourismeaude,{
+        pointToLayer: function (feature, latlng) {
+            var color;
+            switch( feature.properties.tourism ){
+                case 'camp_site': color= "#0f0";
+                case 'hotel': color= "#ff0";
+                case '': color= "#ff0";
+                default: color= "#ff7800";
+            }
+            var geojsonMarkerOptions = {
+                    radius: 8,
+                    fillColor: color,
+                    color: "#000",
+                    weight: 1,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                };
+            return L.circleMarker(latlng, geojsonMarkerOptions);
+        }
+}).addTo(map); 
 var audeContourLayer = L.geoJson( audeContour ).addTo(map); 
 
 
