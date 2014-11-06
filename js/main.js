@@ -28,12 +28,14 @@ var mapqLayer = L.tileLayer('http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.pn
 
 var featureTypes = {
 'camp_site': {color: '#0f0'},
+'caravan_site': {color: '#0f0'},
 'hotel': {color: '#ff0'},
 'information': {color: '#0ff'},
 'picnic_site': {color: '#f0f'},
 'attraction': {color: '#B45F04'},
 'chalet': {color: '#DF013A'},
 'guest_house': {color: '#A901DB'},
+'bed_and_breakfast': {color: '#A901DB'},
 'viewpoint': {color: '#3A01DF'},
 'museum': {color: '#0174DF'},
 'artwork': {color: '#D7DF01'}
