@@ -26,6 +26,9 @@ var mapqLayer = L.tileLayer('http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.pn
 // var offices_layer = 1;
 
 
+var tourismeaude = L.geoJson( tourismeaude ).addTo(map); 
+var audeContourLayer = L.geoJson( audeContour ).addTo(map); 
+
 
 
 
@@ -34,24 +37,28 @@ var baseLayers = {
     "OSM": osmLayer,
     "MapBox": mapqLayer,
 };
+
 //
-//var overLays = {
+var overLays = {
 //    "Offices Du Tourisme": offices_layer,
-//};
+    "Aude (dpt)": audeContourLayer,
+    "Tourisme": tourismeaude 
+};
 
 // Layers switchers
 L.control.layers(baseLayers, overLays).setPosition('topright').addTo(map);
+//L.control.layers(baseLayers).setPosition('topright').addTo(map);
 
 // Scale at bottom left
 L.control.scale().addTo(map);
 
 // Rewrite url to show lat/lon/zoom
 // (uses leaflet-hash plugin as submodule)
-var hash = new L.Hash(map);
+// var hash = new L.Hash(map);
 
 // search field to find place
 // (use leaflet-geocoding plugin as submodule)
-new L.Control.GeoSearch({
-    provider: new L.GeoSearch.Provider.OpenStreetMap(),
-    zoomLevel: 15,
-}).addTo(map);
+// new L.Control.GeoSearch({
+//     provider: new L.GeoSearch.Provider.OpenStreetMap(),
+//     zoomLevel: 15,
+// }).addTo(map);
