@@ -30,9 +30,12 @@ var featureTypes = {
 'camp_site': {color: '#0f0'},
 'caravan_site': {color: '#0f0'},
 'hotel': {color: '#ff0'},
+'motel': {color: '#ff0'},
+'hostel': {color: '#ff0'},
 'information': {color: '#0ff'},
 'picnic_site': {color: '#f0f'},
 'attraction': {color: '#B45F04'},
+'zoo': {color: '#B45F04'},
 'chalet': {color: '#DF013A'},
 'guest_house': {color: '#A901DB'},
 'bed_and_breakfast': {color: '#A901DB'},
@@ -88,13 +91,15 @@ function iconifyFeature( feature, latlng) {
 }
 
 function filterizeFeature(feature, layer){
-    return true;
+//console.log( featureTypes[feature.properties.tourism] );
+//return !featureTypes[feature.properties.tourism]; 
+return true;
 }
 
 var tourismeaude = L.geoJson( tourismeaude,{
+    filter: filterizeFeature,
     onEachFeature: onEachFeature,
     pointToLayer: iconifyFeature, 
-    filter: filterizeFeature,
 }).addTo(map); 
 
 var audeContourLayer = L.geoJson( audeContour, {
