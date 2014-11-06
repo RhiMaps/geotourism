@@ -1,6 +1,7 @@
 var z = 10;
 var myLL = L.latLng(43.03,2.48);
 var defaultColor="#ff7800";
+var defaultIcon="default";
 
 
 
@@ -41,7 +42,7 @@ var featureTypes = {
 
 function onEachFeature(feature, layer) {
     // does this feature have a property named popupContent?
-    var popupcontent="default";
+    var popupcontent="";
     if (feature.properties){
         if ( feature.properties.name) {
             popupcontent="name: "+feature.properties.name+"</br>";
@@ -69,13 +70,28 @@ function colorizeFeature(feature, latlng) {
     return L.circleMarker(latlng, geojsonMarkerOptions);
 }
 
+function iconifyFeature( feature, latlng) {
+    var tourismVal = feature.properties.tourism;
+
+    var iconName = featureTypes[tourismVal] ? tourismVal: defaultIcon;
+    var iconPath = 'data/icons/'+iconName+'.png';
+   var smallIcon = L.icon({
+                      iconSize: [27, 27],
+                      iconAnchor: [13, 27],
+                      popupAnchor:  [1, -24],
+                      iconUrl: iconPath
+   });
+
+   return L.marker(latlng, {icon: smallIcon});
+}
+
 function filterizeFeature(feature, layer){
     return true;
 }
 
 var tourismeaude = L.geoJson( tourismeaude,{
     onEachFeature: onEachFeature,
-    pointToLayer: colorizeFeature, 
+    pointToLayer: iconifyFeature, 
     filter: filterizeFeature,
 }).addTo(map); 
 
