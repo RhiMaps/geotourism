@@ -68,8 +68,14 @@ var tourismeaude = L.geoJson( tourismeaude,{
                 };
             return L.circleMarker(latlng, geojsonMarkerOptions);
         }
+var audeContourLayer = L.geoJson( audeContour, {
+    smoothFactor: "5",
+    style: {
+    "opacity":"1",
+    "stroke-width": "5",
+    "stroke": "blue",
+    }
 }).addTo(map); 
-var audeContourLayer = L.geoJson( audeContour ).addTo(map); 
 
 
 
