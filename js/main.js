@@ -1,5 +1,6 @@
 var z = 10;
 var myLL = L.latLng(43.03,2.48);
+var defaultColor="#ff7800";
 
 
 
@@ -24,7 +25,18 @@ var mapqLayer = L.tileLayer('http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.pn
     subdomains: ['otile1', 'otile2', 'otile3', 'otile4']
 });
 
-// var offices_layer = 1;
+var featureTypes = {
+'camp_site': {color: '#0f0'},
+'hotel': {color: '#ff0'},
+'information': {color: '#0ff'},
+'picnic_site': {color: '#f0f'},
+'attraction': {color: '#B45F04'},
+'chalet': {color: '#DF013A'},
+'guest_house': {color: '#A901DB'},
+'viewpoint': {color: '#3A01DF'},
+'museum': {color: '#0174DF'},
+'artwork': {color: '#D7DF01'}
+};
 
 
 function onEachFeature(feature, layer) {
@@ -41,33 +53,32 @@ function onEachFeature(feature, layer) {
     layer.bindPopup(popupcontent);
 }
 
+function colorizeFeature(feature, latlng) {
+
+    var tourismVal = feature.properties.tourism;
+
+    var color = featureTypes[tourismVal] ? featureTypes[tourismVal].color: defaultColor;
+    var geojsonMarkerOptions = {
+            radius: 8,
+            fillColor: color,
+            color: "#000",
+            weight: 1,
+            opacity: 1,
+            fillOpacity: 0.8
+        };
+    return L.circleMarker(latlng, geojsonMarkerOptions);
+}
+
+function filterizeFeature(feature, layer){
+    return true;
+}
+
 var tourismeaude = L.geoJson( tourismeaude,{
-        onEachFeature: onEachFeature,
-        pointToLayer: function (feature, latlng) {
-            var color;
-            switch( feature.properties.tourism ){
-                case 'camp_site': color= "#0f0";break;
-                case 'hotel': color= "#ff0";break;
-                case 'information': color= "#0ff";break;
-                case 'picnic_site': color= "#f0f";break;
-                case 'attraction': color= "#B45F04";break;
-                case 'chalet': color= "#DF013A";break;
-                case 'guest_house': color= "#A901DB";break;
-                case 'viewpoint': color= "#3A01DF";break;
-                case 'museum': color= "#0174DF";break;
-                case 'artwork': color= "#D7DF01";break;
-                default: color= "#ff7800";
-            }
-            var geojsonMarkerOptions = {
-                    radius: 8,
-                    fillColor: color,
-                    color: "#000",
-                    weight: 1,
-                    opacity: 1,
-                    fillOpacity: 0.8
-                };
-            return L.circleMarker(latlng, geojsonMarkerOptions);
-        }
+    onEachFeature: onEachFeature,
+    pointToLayer: colorizeFeature, 
+    filter: filterizeFeature,
+}).addTo(map); 
+
 var audeContourLayer = L.geoJson( audeContour, {
     smoothFactor: "5",
     style: {
