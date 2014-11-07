@@ -13,7 +13,8 @@ img.leaflet-marker-icon {
 }
 
 #toolbar { 
-    padding: 10px;
+    margin: 0px;
+    padding: 0px;
     /*
     border: solid grey 3px;
     */
@@ -25,10 +26,15 @@ img.leaflet-marker-icon {
 }
 
 #toolbar img {
+    background-color: lightgrey;
+    border: solid white 1pt ;
     width: 26px;
     height: 26px;
 }
 #toolbar li:hover img {
-    width: 35px;
-    height: 35px;
+    background-color: white !important;
+}
+img.shade {
+    background-color: darkgrey !important;
+    border: solid black 1pt !important;
 }
