@@ -2,6 +2,7 @@ var z = 10;
 var myLL = L.latLng(43.03,2.48);
 var defaultColor="#ff7800";
 var defaultIcon="default";
+var selectedType="information";
 
 
 
@@ -92,7 +93,7 @@ function iconifyFeature( feature, latlng) {
 function filterizeFeature(feature, layer){
 //console.log( featureTypes[feature.properties.tourism] );
 //return !featureTypes[feature.properties.tourism]; 
-return true;
+return selectedType==feature.properties.tourism; 
 }
 
 var tourismeaude = L.geoJson( tourismeaude,{
@@ -145,6 +146,13 @@ L.control.scale().addTo(map);
 // }).addTo(map);
 //
 //
+
+$("#artwork").click(function() {
+    console.log("Clicked artwork");
+    selectedType="artwork";
+    map.removeLayer(tourismeaude)
+    map.addLayer(tourismeaude)
+});
 
 
 //map.fitBounds(audeContourLayer.getBounds());
