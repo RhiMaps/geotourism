@@ -2,6 +2,8 @@ var z = 10;
 var myLL = L.latLng(43.03,2.48);
 var defaultColor="#ff7800";
 var defaultIcon="default";
+var selectedType="information";
+var mapLayerGroups = [];
 
 
 
@@ -10,7 +12,6 @@ var map = L.map('map', {
     center: myLL,
     zoom: z
 });
-
 
 // add an OpenStreetMap tile layer
 var osmLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
@@ -45,8 +46,8 @@ var featureTypes = {
 };
 
 
-function onEachFeature(feature, layer) {
-    // does this feature have a property named popupContent?
+function onEachFeature(feature, featureLayer) {
+    // create popup at click on feature
     var popupcontent="";
     if (feature.properties){
         if ( feature.properties.name) {
@@ -56,7 +57,25 @@ function onEachFeature(feature, layer) {
             popupcontent+="tourism: "+feature.properties.tourism;
         }
     }
-    layer.bindPopup(popupcontent);
+    featureLayer.bindPopup(popupcontent);
+
+    // now add to layer group based on type
+    // ( from http://stackoverflow.com/questions/16148598/leaflet-update-geojson-filter )
+    //
+
+    // does layerGroup already exist? if not create it and add to map
+    var lg = mapLayerGroups[feature.properties.tourism];
+
+    if (lg === undefined) {
+        lg = new L.layerGroup();
+        //add the layer to the map
+        lg.addTo(map);
+        //store layer
+        mapLayerGroups[feature.properties.tourism] = lg;
+    }
+
+    //add the feature to the layer
+    lg.addLayer(featureLayer);
 }
 
 function colorizeFeature(feature, latlng) {
@@ -90,17 +109,10 @@ function iconifyFeature( feature, latlng) {
    return L.marker(latlng, {icon: smallIcon});
 }
 
-function filterizeFeature(feature, layer){
-//console.log( featureTypes[feature.properties.tourism] );
-//return !featureTypes[feature.properties.tourism]; 
-return true;
-}
-
 var tourismeaude = L.geoJson( tourismeaude,{
-    filter: filterizeFeature,
     onEachFeature: onEachFeature,
     pointToLayer: iconifyFeature, 
-}).addTo(map); 
+});
 
 var audeContourLayer = L.geoJson( audeContour, {
     smoothFactor: "5",
@@ -144,3 +156,35 @@ L.control.scale().addTo(map);
 //     provider: new L.GeoSearch.Provider.OpenStreetMap(),
 //     zoomLevel: 15,
 // }).addTo(map);
+//
+//
+
+
+/*
+* show/hide layerGroup   
+*/
+function showLayer(id) {
+    var lg = mapLayerGroups[id];
+    map.addLayer(lg);   
+}
+function hideLayer(id) {
+    var lg = mapLayerGroups[id];
+    map.removeLayer(lg);   
+}
+function showOnlyLayer(id){
+    selectedType=id;
+    for(var key in mapLayerGroups )
+    {
+        map.removeLayer(mapLayerGroups[key]);
+    }
+    showLayer(id);
+}
+
+$("#artwork").click(function() { showOnlyLayer("artwork"); });
+$("#attraction").click(function(){ showOnlyLayer("attraction"); }); 
+$("#camp_site").click(function(){ showOnlyLayer("camp_site"); }); 
+$("#hotel").click(function(){ showOnlyLayer("hotel"); }); 
+$("#information").click(function(){ showOnlyLayer("information"); }); 
+
+
+//map.fitBounds(audeContourLayer.getBounds());
