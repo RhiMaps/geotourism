@@ -3,8 +3,42 @@ var myLL = L.latLng(43.03,2.48);
 var defaultColor="#ff7800";
 var defaultIcon="default";
 var selectedType="information";
+var selectedLayers = [];
 var mapLayerGroups = [];
 
+var featureTypes = {
+    'camp_site': {color: '#0f0'},
+    'caravan_site': {color: '#0f0'},
+    'hotel': {color: '#ff0'},
+    'motel': {color: '#ff0'},
+    'hostel': {color: '#ff0'},
+    'information': {color: '#0ff'},
+    'picnic_site': {color: '#f0f'},
+    'attraction': {color: '#B45F04'},
+    'zoo': {color: '#B45F04'},
+    'chalet': {color: '#DF013A'},
+    'guest_house': {color: '#A901DB'},
+    'bed_and_breakfast': {color: '#A901DB'},
+    'viewpoint': {color: '#3A01DF'},
+    'museum': {color: '#0174DF'},
+    'artwork': {color: '#D7DF01'}
+};
+
+function type2iconpath( type ){
+    return "data/icons/"+type+".png";
+}
+
+
+// dynamically fill toolbar
+// TODO: get rid of featureTypes an use mapLayerGroups
+// instead
+for(var key in featureTypes ) {
+    var img = $('<img src="'+type2iconpath(key)+'"></li>');
+    img.click(function(){ toggleLayer( key ); });
+    var li = $("<li></li>");
+    li.append( img );
+    $("#toolbar").append(li);
+}
 
 
 // create a map in the "map" div, set the view to a given place and zoom
@@ -26,24 +60,6 @@ var mapqLayer = L.tileLayer('http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.pn
     attribution: 'MapQuest OpenStreetMap',
     subdomains: ['otile1', 'otile2', 'otile3', 'otile4']
 });
-
-var featureTypes = {
-'camp_site': {color: '#0f0'},
-'caravan_site': {color: '#0f0'},
-'hotel': {color: '#ff0'},
-'motel': {color: '#ff0'},
-'hostel': {color: '#ff0'},
-'information': {color: '#0ff'},
-'picnic_site': {color: '#f0f'},
-'attraction': {color: '#B45F04'},
-'zoo': {color: '#B45F04'},
-'chalet': {color: '#DF013A'},
-'guest_house': {color: '#A901DB'},
-'bed_and_breakfast': {color: '#A901DB'},
-'viewpoint': {color: '#3A01DF'},
-'museum': {color: '#0174DF'},
-'artwork': {color: '#D7DF01'}
-};
 
 
 function onEachFeature(feature, featureLayer) {
@@ -76,6 +92,8 @@ function onEachFeature(feature, featureLayer) {
 
     //add the feature to the layer
     lg.addLayer(featureLayer);
+    // add type to selected
+    selectedLayers[feature.properties.tourism]=1;
 }
 
 function colorizeFeature(feature, latlng) {
@@ -175,16 +193,19 @@ function showOnlyLayer(id){
     selectedType=id;
     for(var key in mapLayerGroups )
     {
-        map.removeLayer(mapLayerGroups[key]);
+        hideLayer( key );
     }
     showLayer(id);
 }
 
-$("#artwork").click(function() { showOnlyLayer("artwork"); });
-$("#attraction").click(function(){ showOnlyLayer("attraction"); }); 
-$("#camp_site").click(function(){ showOnlyLayer("camp_site"); }); 
-$("#hotel").click(function(){ showOnlyLayer("hotel"); }); 
-$("#information").click(function(){ showOnlyLayer("information"); }); 
-
+function toggleLayer( id ){
+    if ( selectedLayers[id] === undefined ){
+        showLayer( id );
+        selectedLayers[id]=1;
+    }else{
+        hideLayer( id );
+        delete selectedLayers[id];
+    }
+}
 
 //map.fitBounds(audeContourLayer.getBounds());
