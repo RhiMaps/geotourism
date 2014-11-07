@@ -193,11 +193,9 @@ function toggleLayer( id ){
     }
 }
 
-$("#artwork").click(function() { toggleLayer("artwork"); });
-$("#attraction").click(function(){ toggleLayer("attraction"); }); 
-$("#camp_site").click(function(){ toggleLayer("camp_site"); }); 
-$("#hotel").click(function(){ toggleLayer("hotel"); }); 
-$("#information").click(function(){ toggleLayer("information"); }); 
-
+$("#toolbar img").click(function(){ 
+    var currType = $(this).attr('id');
+    toggleLayer( currType );
+});
 
 //map.fitBounds(audeContourLayer.getBounds());
