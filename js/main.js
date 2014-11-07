@@ -47,7 +47,7 @@ var featureTypes = {
 
 
 function onEachFeature(feature, featureLayer) {
-    // does this feature have a property named popupContent?
+    // create popup at click on feature
     var popupcontent="";
     if (feature.properties){
         if ( feature.properties.name) {
@@ -60,20 +60,22 @@ function onEachFeature(feature, featureLayer) {
     featureLayer.bindPopup(popupcontent);
 
     // now add to layer group based on type
-    // from http://stackoverflow.com/questions/16148598/leaflet-update-geojson-filter
+    // ( from http://stackoverflow.com/questions/16148598/leaflet-update-geojson-filter )
+    //
+
     // does layerGroup already exist? if not create it and add to map
-    var lg = mapLayerGroups[feature.properties.type];
+    var lg = mapLayerGroups[feature.properties.tourism];
 
     if (lg === undefined) {
         lg = new L.layerGroup();
         //add the layer to the map
         lg.addTo(map);
         //store layer
-        mapLayerGroups[feature.properties.type] = lg;
+        mapLayerGroups[feature.properties.tourism] = lg;
     }
 
     //add the feature to the layer
-    lg.addLayer(featureLayer);      
+    lg.addLayer(featureLayer);
 }
 
 function colorizeFeature(feature, latlng) {
@@ -157,12 +159,32 @@ L.control.scale().addTo(map);
 //
 //
 
-$("#artwork").click(function() {
-    console.log("Clicked artwork");
-    selectedType="artwork";
-    map.removeLayer(tourismeaude)
-    map.addLayer(tourismeaude)
-});
+
+/*
+* show/hide layerGroup   
+*/
+function showLayer(id) {
+    var lg = mapLayerGroups[id];
+    map.addLayer(lg);   
+}
+function hideLayer(id) {
+    var lg = mapLayerGroups[id];
+    map.removeLayer(lg);   
+}
+function showOnlyLayer(id){
+    selectedType=id;
+    for(var key in mapLayerGroups )
+    {
+        map.removeLayer(mapLayerGroups[key]);
+    }
+    showLayer(id);
+}
+
+$("#artwork").click(function() { showOnlyLayer("artwork"); });
+$("#attraction").click(function(){ showOnlyLayer("attraction"); }); 
+$("#camp_site").click(function(){ showOnlyLayer("camp_site"); }); 
+$("#hotel").click(function(){ showOnlyLayer("hotel"); }); 
+$("#information").click(function(){ showOnlyLayer("information"); }); 
 
 
 //map.fitBounds(audeContourLayer.getBounds());
