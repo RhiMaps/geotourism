@@ -24,6 +24,21 @@ var featureTypes = {
     'artwork': {color: '#D7DF01'}
 };
 
+function type2iconpath( type ){
+    return "data/icons/"+type+".png";
+}
+
+
+// dynamically fill toolbar
+// TODO: get rid of featureTypes an use mapLayerGroups
+// instead
+for(var key in featureTypes ) {
+    var img = $('<img src="'+type2iconpath(key)+'"></li>');
+    img.click(function(){ toggleLayer( key ); });
+    var li = $("<li></li>");
+    li.append( img );
+    $("#toolbar").append(li);
+}
 
 
 // create a map in the "map" div, set the view to a given place and zoom
@@ -192,10 +207,5 @@ function toggleLayer( id ){
         delete selectedLayers[id];
     }
 }
-
-$("#toolbar img").click(function(){ 
-    var currType = $(this).attr('id');
-    toggleLayer( currType );
-});
 
 //map.fitBounds(audeContourLayer.getBounds());
