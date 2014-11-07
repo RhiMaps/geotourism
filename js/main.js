@@ -3,6 +3,7 @@ var myLL = L.latLng(43.03,2.48);
 var defaultColor="#ff7800";
 var defaultIcon="default";
 var selectedType="information";
+var mapLayerGroups = [];
 
 
 
@@ -45,7 +46,7 @@ var featureTypes = {
 };
 
 
-function onEachFeature(feature, layer) {
+function onEachFeature(feature, featureLayer) {
     // does this feature have a property named popupContent?
     var popupcontent="";
     if (feature.properties){
@@ -56,7 +57,23 @@ function onEachFeature(feature, layer) {
             popupcontent+="tourism: "+feature.properties.tourism;
         }
     }
-    layer.bindPopup(popupcontent);
+    featureLayer.bindPopup(popupcontent);
+
+    // now add to layer group based on type
+    // from http://stackoverflow.com/questions/16148598/leaflet-update-geojson-filter
+    // does layerGroup already exist? if not create it and add to map
+    var lg = mapLayerGroups[feature.properties.type];
+
+    if (lg === undefined) {
+        lg = new L.layerGroup();
+        //add the layer to the map
+        lg.addTo(map);
+        //store layer
+        mapLayerGroups[feature.properties.type] = lg;
+    }
+
+    //add the feature to the layer
+    lg.addLayer(featureLayer);      
 }
 
 function colorizeFeature(feature, latlng) {
@@ -90,17 +107,10 @@ function iconifyFeature( feature, latlng) {
    return L.marker(latlng, {icon: smallIcon});
 }
 
-function filterizeFeature(feature, layer){
-//console.log( featureTypes[feature.properties.tourism] );
-//return !featureTypes[feature.properties.tourism]; 
-return selectedType==feature.properties.tourism; 
-}
-
 var tourismeaude = L.geoJson( tourismeaude,{
-    filter: filterizeFeature,
     onEachFeature: onEachFeature,
     pointToLayer: iconifyFeature, 
-}).addTo(map); 
+});
 
 var audeContourLayer = L.geoJson( audeContour, {
     smoothFactor: "5",
