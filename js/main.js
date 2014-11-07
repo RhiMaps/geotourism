@@ -32,9 +32,10 @@ function type2iconpath( type ){
 // dynamically fill toolbar
 // TODO: get rid of featureTypes an use mapLayerGroups
 // instead
-for(var key in featureTypes ) {
-    var img = $('<img src="'+type2iconpath(key)+'"></li>');
-    img.click(function(){ toggleLayer( key ); });
+for(key in featureTypes ) {
+    console.log(key);
+    var img = $('<img id="'+key+'" src="'+type2iconpath(key)+'"></li>');
+    img.click( function(){ toggleLayer( $(this).attr("id") ); });
     var li = $("<li></li>");
     li.append( img );
     $("#toolbar").append(li);
@@ -199,6 +200,7 @@ function showOnlyLayer(id){
 }
 
 function toggleLayer( id ){
+    console.log(id);
     if ( selectedLayers[id] === undefined ){
         showLayer( id );
         selectedLayers[id]=1;
