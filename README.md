@@ -7,7 +7,7 @@ A map to display the tourism POIs for your area.
 
 ### Data
  - properly filter tags by Aude polygon
- - insert other tags in data file (
+ - insert other tags in data file ( castles/ruins )
 
 ### Ui
  - allow bytag filtering with an iconed tool bar. 
