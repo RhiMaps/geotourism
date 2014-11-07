@@ -11,3 +11,24 @@ img.leaflet-marker-icon {
     width: 25px !important;
     height: 25px !important;
 }
+
+#toolbar { 
+    padding: 10px;
+    /*
+    border: solid grey 3px;
+    */
+    position: absolute;
+    z-index: 20;
+    top: 200px;
+    right: 15px;
+    list-style: none;
+}
+
+#toolbar img {
+    width: 26px;
+    height: 26px;
+}
+#toolbar li:hover img {
+    width: 35px;
+    height: 35px;
+}

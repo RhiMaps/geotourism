@@ -11,7 +11,6 @@ var map = L.map('map', {
     zoom: z
 });
 
-
 // add an OpenStreetMap tile layer
 var osmLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
     attribution: 'OpenStreetMap'
@@ -144,3 +143,8 @@ L.control.scale().addTo(map);
 //     provider: new L.GeoSearch.Provider.OpenStreetMap(),
 //     zoomLevel: 15,
 // }).addTo(map);
+//
+//
+
+
+//map.fitBounds(audeContourLayer.getBounds());
