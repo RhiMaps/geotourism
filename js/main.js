@@ -29,8 +29,19 @@ var featureTypes = {
     'artwork': {color: '#D7DF01', title: 'Oeuvre d\'Art'}
 };
 
+/*
+ * Get tourism or historic feature property value
+ */
+function feature2type( feature ){
+    var tourismVal = feature.properties.tourism;
+    var historicVal = feature.properties.historic;
+    var featureType = historicVal ? historicVal : tourismVal;
+    return featureType;
+}
+
 function type2iconpath( type ){
-    return "data/icons/"+type+".png";
+    var value = featureTypes[type] ? type: defaultIcon;
+    return "data/icons/"+value+".png";
 }
 
 
@@ -86,6 +97,9 @@ function onEachHistoric(feature, featureLayer) {
 }
 
 function onEachFeature(feature, featureLayer) {
+
+    var featureType = feature2type( feature );
+
     // create popup at click on feature
     var popupcontent="";
     if (feature.properties){
@@ -93,7 +107,10 @@ function onEachFeature(feature, featureLayer) {
             popupcontent="name: "+feature.properties.name+"</br>";
         }
         if ( feature.properties.tourism){
-            popupcontent+="tourism: "+feature.properties.tourism;
+                popupcontent+="tourism: "+feature.properties.tourism;
+        }
+        if ( feature.properties.historic){
+                popupcontent+="historic: "+feature.properties.historic;
         }
     }
     featureLayer.bindPopup(popupcontent);
@@ -103,20 +120,20 @@ function onEachFeature(feature, featureLayer) {
     //
 
     // does layerGroup already exist? if not create it and add to map
-    var lg = mapLayerGroups[feature.properties.tourism];
+    var lg = mapLayerGroups[featureType];
 
     if (lg === undefined) {
         lg = new L.layerGroup();
         //add the layer to the map
         lg.addTo(map);
         //store layer
-        mapLayerGroups[feature.properties.tourism] = lg;
+        mapLayerGroups[featureType] = lg;
     }
 
     //add the feature to the layer
     lg.addLayer(featureLayer);
     // add type to selected
-    selectedLayers[feature.properties.tourism]=1;
+    selectedLayers[featureType]=1;
 }
 
 function featureToColor( feature ){
@@ -144,10 +161,9 @@ function colorizeFeature(feature, latlng) {
 
 function iconifyFeature( feature, latlng) {
 
-    var tourismVal = feature.properties.tourism;
-    var iconName = featureTypes[tourismVal] ? tourismVal: defaultIcon;
+   var featureType = feature2type( feature ) ;
+   var iconPath = type2iconpath( featureType );
 
-    var iconPath = 'data/icons/'+iconName+'.png';
    var smallIcon = L.icon({
                       iconSize: [27, 27],
                       iconAnchor: [13, 27],
@@ -164,8 +180,8 @@ var tourismLayer = L.geoJson( tourismeaude,{
 }).addTo(map);
 
 var historicLayer = L.geoJson( historic_ruins,{
-    onEachFeature: onEachHistoric,
-    pointToLayer: colorizeFeature, 
+    onEachFeature: onEachFeature,
+    pointToLayer: iconifyFeature, 
 }).addTo(map);
 
 
