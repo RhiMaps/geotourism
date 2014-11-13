@@ -42,10 +42,13 @@ for(var key in featureTypes ) {
 
 
 // create a map in the "map" div, set the view to a given place and zoom
-var map = L.map('map', {
-    center: myLL,
-    zoom: z
-});
+var map = L.map('map');
+//var map = L.map('map', {
+//    center: myLL,
+//    zoom: z,
+//    maxZoom: 15,
+//    minZoom: 9
+//});
 
 // add an OpenStreetMap tile layer
 var osmLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
@@ -173,8 +176,6 @@ var baseLayers = {
 
 //
 var overLays = {
-//    "Offices Du Tourisme": offices_layer,
-    "Aude (dpt)": audeContourLayer,
     "Tourisme": tourismLayer, 
     "Histoire": historicLayer
 };
@@ -231,4 +232,6 @@ function toggleLayer( id ){
     }
 }
 
-//map.fitBounds(audeContourLayer.getBounds());
+map.fitBounds(audeContourLayer.getBounds());
+map.setMaxBounds( map.getBounds() );
+map.options.minZoom = map.getZoom() -1 ;
