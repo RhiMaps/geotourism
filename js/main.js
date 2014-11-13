@@ -7,6 +7,11 @@ var selectedLayers = [];
 var mapLayerGroups = [];
 
 var featureTypes = {
+    'wayside_shrine': {color: '#3A01DF'},
+    'wayside_cross': {color: 'yellow'},
+    'archaeological_site': {color: '#B45F04'},
+    'castle': {color: 'green'},
+    'ruins': {color: 'blue'},
     'camp_site': {color: '#0f0'},
     'caravan_site': {color: '#0f0'},
     'hotel': {color: '#ff0'},
@@ -114,11 +119,20 @@ function onEachFeature(feature, featureLayer) {
     selectedLayers[feature.properties.tourism]=1;
 }
 
+function featureToColor( feature ){
+    var color = "red"
+   var historicVal = feature.properties.historic;
+    console.log( historicVal);
+    if (  historicVal && featureTypes[historicVal] ) {
+        color = featureTypes[historicVal].color;
+    }
+    console.log( color);
+    return color;
+}
+
 function colorizeFeature(feature, latlng) {
 
-    var tourismVal = feature.properties.tourism;
-
-    var color = featureTypes[tourismVal] ? featureTypes[tourismVal].color: defaultColor;
+    var color = featureToColor( feature); 
     var geojsonMarkerOptions = {
             radius: 8,
             fillColor: color,
@@ -148,7 +162,7 @@ function iconifyFeature( feature, latlng) {
 var tourismLayer = L.geoJson( tourismeaude,{
     onEachFeature: onEachFeature,
     pointToLayer: iconifyFeature, 
-});
+}).addTo(map);
 
 var historicLayer = L.geoJson( historic_ruins,{
     onEachFeature: onEachHistoric,
