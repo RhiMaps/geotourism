@@ -61,6 +61,21 @@ var mapqLayer = L.tileLayer('http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.pn
     subdomains: ['otile1', 'otile2', 'otile3', 'otile4']
 });
 
+function onEachHistoric(feature, featureLayer) {
+    // create popup at click on feature
+    var popupcontent="";
+    if (feature.properties){
+        if ( feature.properties.name) {
+            popupcontent="name: "+feature.properties.name+"</br>";
+        }
+        if ( feature.properties.tourism){
+            popupcontent+="historic: "+feature.properties.historic;
+        }
+    }
+    featureLayer.bindPopup(popupcontent);
+
+
+}
 
 function onEachFeature(feature, featureLayer) {
     // create popup at click on feature
@@ -127,10 +142,16 @@ function iconifyFeature( feature, latlng) {
    return L.marker(latlng, {icon: smallIcon});
 }
 
-var tourismeaude = L.geoJson( tourismeaude,{
+var tourismLayer = L.geoJson( tourismeaude,{
     onEachFeature: onEachFeature,
     pointToLayer: iconifyFeature, 
 });
+
+var historicLayer = L.geoJson( historic_ruins,{
+    onEachFeature: onEachHistoric,
+    pointToLayer: colorizeFeature, 
+});
+
 
 var audeContourLayer = L.geoJson( audeContour, {
     smoothFactor: "5",
@@ -154,7 +175,8 @@ var baseLayers = {
 var overLays = {
 //    "Offices Du Tourisme": offices_layer,
     "Aude (dpt)": audeContourLayer,
-    "Tourisme": tourismeaude 
+    "Tourisme": tourismLayer, 
+    "Histoire": historicLayer
 };
 
 // Layers switchers
