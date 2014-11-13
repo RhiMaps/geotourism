@@ -68,7 +68,7 @@ function onEachHistoric(feature, featureLayer) {
         if ( feature.properties.name) {
             popupcontent="name: "+feature.properties.name+"</br>";
         }
-        if ( feature.properties.tourism){
+        if ( feature.properties.historic){
             popupcontent+="historic: "+feature.properties.historic;
         }
     }
@@ -150,7 +150,7 @@ var tourismLayer = L.geoJson( tourismeaude,{
 var historicLayer = L.geoJson( historic_ruins,{
     onEachFeature: onEachHistoric,
     pointToLayer: colorizeFeature, 
-});
+}).addTo(map);
 
 
 var audeContourLayer = L.geoJson( audeContour, {
