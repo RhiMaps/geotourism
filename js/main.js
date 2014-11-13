@@ -34,15 +34,16 @@ function type2iconpath( type ){
 }
 
 
-// dynamically fill toolbar
-// TODO: get rid of featureTypes an use mapLayerGroups
-// instead
-for(var key in featureTypes ) {
-    var img = $('<img id="'+key+'" src="'+type2iconpath(key)+'"></li>');
-    img.click(function(){ toggleLayer( $(this).attr("id") ); $(this).toggleClass("shade")});
-    var li = $("<li></li>");
-    li.append( img );
-    $("#toolbar").append(li);
+function fillToolBar(){
+    // dynamically fill toolbar
+    // instead
+    for(var key in mapLayerGroups ) {
+        var img = $('<img id="'+key+'" src="'+type2iconpath(key)+'"></li>');
+        img.click(function(){ toggleLayer( $(this).attr("id") ); $(this).toggleClass("shade")});
+        var li = $("<li></li>");
+        li.append( img );
+        $("#toolbar").append(li);
+    }
 }
 
 
@@ -81,8 +82,6 @@ function onEachHistoric(feature, featureLayer) {
         }
     }
     featureLayer.bindPopup(popupcontent);
-
-
 }
 
 function onEachFeature(feature, featureLayer) {
@@ -145,9 +144,10 @@ function colorizeFeature(feature, latlng) {
 }
 
 function iconifyFeature( feature, latlng) {
-    var tourismVal = feature.properties.tourism;
 
+    var tourismVal = feature.properties.tourism;
     var iconName = featureTypes[tourismVal] ? tourismVal: defaultIcon;
+
     var iconPath = 'data/icons/'+iconName+'.png';
    var smallIcon = L.icon({
                       iconSize: [27, 27],
@@ -248,4 +248,5 @@ function toggleLayer( id ){
 
 map.fitBounds(audeContourLayer.getBounds());
 map.setMaxBounds( map.getBounds() );
-map.options.minZoom = map.getZoom() -1 ;
+map.options.minZoom = map.getZoom();
+fillToolBar();
