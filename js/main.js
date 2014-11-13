@@ -7,45 +7,66 @@ var selectedLayers = [];
 var mapLayerGroups = [];
 
 var featureTypes = {
-    'camp_site': {color: '#0f0'},
-    'caravan_site': {color: '#0f0'},
-    'hotel': {color: '#ff0'},
-    'motel': {color: '#ff0'},
-    'hostel': {color: '#ff0'},
-    'information': {color: '#0ff'},
-    'picnic_site': {color: '#f0f'},
-    'attraction': {color: '#B45F04'},
-    'zoo': {color: '#B45F04'},
-    'chalet': {color: '#DF013A'},
-    'guest_house': {color: '#A901DB'},
-    'bed_and_breakfast': {color: '#A901DB'},
-    'viewpoint': {color: '#3A01DF'},
-    'museum': {color: '#0174DF'},
-    'artwork': {color: '#D7DF01'}
+    'wayside_shrine': {color: '#3A01DF', title: 'Chapelle'},
+    'wayside_cross': {color: 'yellow', title: 'Croix'},
+    'archaeological_site': {color: '#B45F04', title: 'Site Archéologique'},
+    'castle': {color: 'green', title: 'Châteaux'},
+    'ruins': {color: 'blue', title: 'Ruines'},
+    'camp_site': {color: '#0f0', title: 'Camping'},
+    'caravan_site': {color: '#0f0', title: 'Aire pour Caravanes'},
+    'hotel': {color: '#ff0', title: 'Hôtel'},
+    'motel': {color: '#ff0', title: 'Motel'},
+    'hostel': {color: '#ff0', title: 'Hôtel'},
+    'information': {color: '#0ff', title: 'Information'},
+    'picnic_site': {color: '#f0f', title: 'Aire de PicNic'},
+    'attraction': {color: '#B45F04', title: 'attraction'},
+    'zoo': {color: '#B45F04', title: 'zoo'},
+    'chalet': {color: '#DF013A', title: 'chalet'},
+    'guest_house': {color: '#A901DB', title: 'guest_house'},
+    'bed_and_breakfast': {color: '#A901DB', title: 'bed_and_breakfast'},
+    'viewpoint': {color: '#3A01DF', title: 'Point de Vue'},
+    'museum': {color: '#0174DF', title: 'Musée'},
+    'artwork': {color: '#D7DF01', title: 'Oeuvre d\'Art'}
 };
 
+/*
+ * Get tourism or historic feature property value
+ */
+function feature2type( feature ){
+    var tourismVal = feature.properties.tourism;
+    var historicVal = feature.properties.historic;
+    var featureType = historicVal ? historicVal : tourismVal;
+    return featureType;
+}
+
 function type2iconpath( type ){
-    return "data/icons/"+type+".png";
+    var value = featureTypes[type] ? type: defaultIcon;
+    return "data/icons/"+value+".png";
 }
 
 
-// dynamically fill toolbar
-// TODO: get rid of featureTypes an use mapLayerGroups
-// instead
-for(var key in featureTypes ) {
-    var img = $('<img id="'+key+'" src="'+type2iconpath(key)+'"></li>');
-    img.click(function(){ toggleLayer( $(this).attr("id") ); $(this).toggleClass("shade")});
-    var li = $("<li></li>");
-    li.append( img );
-    $("#toolbar").append(li);
+/*
+ * dynamically fill toolbar
+ */
+function fillToolBar(){
+    for(var key in featureTypes ) {
+        var img = $('<img title="'+featureTypes[key].title+'" id="'+key+'" src="'+type2iconpath(key)+'"></li>');
+        img.click(function(){ toggleLayer( $(this).attr("id") ); $(this).toggleClass("shade")});
+        var li = $("<li></li>");
+        li.append( img );
+        $("#toolbar").append(li);
+    }
 }
 
 
 // create a map in the "map" div, set the view to a given place and zoom
-var map = L.map('map', {
-    center: myLL,
-    zoom: z
-});
+var map = L.map('map');
+//var map = L.map('map', {
+//    center: myLL,
+//    zoom: z,
+//    maxZoom: 15,
+//    minZoom: 9
+//});
 
 // add an OpenStreetMap tile layer
 var osmLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
@@ -61,8 +82,24 @@ var mapqLayer = L.tileLayer('http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.pn
     subdomains: ['otile1', 'otile2', 'otile3', 'otile4']
 });
 
+function onEachHistoric(feature, featureLayer) {
+    // create popup at click on feature
+    var popupcontent="";
+    if (feature.properties){
+        if ( feature.properties.name) {
+            popupcontent="name: "+feature.properties.name+"</br>";
+        }
+        if ( feature.properties.historic){
+            popupcontent+="historic: "+feature.properties.historic;
+        }
+    }
+    featureLayer.bindPopup(popupcontent);
+}
 
 function onEachFeature(feature, featureLayer) {
+
+    var featureType = feature2type( feature );
+
     // create popup at click on feature
     var popupcontent="";
     if (feature.properties){
@@ -70,7 +107,10 @@ function onEachFeature(feature, featureLayer) {
             popupcontent="name: "+feature.properties.name+"</br>";
         }
         if ( feature.properties.tourism){
-            popupcontent+="tourism: "+feature.properties.tourism;
+                popupcontent+="tourism: "+feature.properties.tourism;
+        }
+        if ( feature.properties.historic){
+                popupcontent+="historic: "+feature.properties.historic;
         }
     }
     featureLayer.bindPopup(popupcontent);
@@ -80,27 +120,34 @@ function onEachFeature(feature, featureLayer) {
     //
 
     // does layerGroup already exist? if not create it and add to map
-    var lg = mapLayerGroups[feature.properties.tourism];
+    var lg = mapLayerGroups[featureType];
 
     if (lg === undefined) {
         lg = new L.layerGroup();
         //add the layer to the map
         lg.addTo(map);
         //store layer
-        mapLayerGroups[feature.properties.tourism] = lg;
+        mapLayerGroups[featureType] = lg;
     }
 
     //add the feature to the layer
     lg.addLayer(featureLayer);
     // add type to selected
-    selectedLayers[feature.properties.tourism]=1;
+    selectedLayers[featureType]=1;
+}
+
+function featureToColor( feature ){
+    var color = "red"
+   var historicVal = feature.properties.historic;
+    if (  historicVal && featureTypes[historicVal] ) {
+        color = featureTypes[historicVal].color;
+    }
+    return color;
 }
 
 function colorizeFeature(feature, latlng) {
 
-    var tourismVal = feature.properties.tourism;
-
-    var color = featureTypes[tourismVal] ? featureTypes[tourismVal].color: defaultColor;
+    var color = featureToColor( feature); 
     var geojsonMarkerOptions = {
             radius: 8,
             fillColor: color,
@@ -113,10 +160,10 @@ function colorizeFeature(feature, latlng) {
 }
 
 function iconifyFeature( feature, latlng) {
-    var tourismVal = feature.properties.tourism;
 
-    var iconName = featureTypes[tourismVal] ? tourismVal: defaultIcon;
-    var iconPath = 'data/icons/'+iconName+'.png';
+   var featureType = feature2type( feature ) ;
+   var iconPath = type2iconpath( featureType );
+
    var smallIcon = L.icon({
                       iconSize: [27, 27],
                       iconAnchor: [13, 27],
@@ -127,10 +174,16 @@ function iconifyFeature( feature, latlng) {
    return L.marker(latlng, {icon: smallIcon});
 }
 
-var tourismeaude = L.geoJson( tourismeaude,{
+var tourismLayer = L.geoJson( tourismeaude,{
     onEachFeature: onEachFeature,
     pointToLayer: iconifyFeature, 
-});
+}).addTo(map);
+
+var historicLayer = L.geoJson( historic_ruins,{
+    onEachFeature: onEachFeature,
+    pointToLayer: iconifyFeature, 
+}).addTo(map);
+
 
 var audeContourLayer = L.geoJson( audeContour, {
     smoothFactor: "5",
@@ -152,9 +205,8 @@ var baseLayers = {
 
 //
 var overLays = {
-//    "Offices Du Tourisme": offices_layer,
-    "Aude (dpt)": audeContourLayer,
-    "Tourisme": tourismeaude 
+    "Tourisme": tourismLayer, 
+    "Histoire": historicLayer
 };
 
 // Layers switchers
@@ -199,7 +251,6 @@ function showOnlyLayer(id){
 }
 
 function toggleLayer( id ){
-    console.log(id);
     if ( selectedLayers[id] === undefined ){
         showLayer( id );
         selectedLayers[id]=1;
@@ -209,4 +260,7 @@ function toggleLayer( id ){
     }
 }
 
-//map.fitBounds(audeContourLayer.getBounds());
+map.fitBounds(audeContourLayer.getBounds());
+map.setMaxBounds( map.getBounds() );
+map.options.minZoom = map.getZoom();
+fillToolBar();
