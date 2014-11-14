@@ -8,27 +8,50 @@ var selectedLayers = [];
 var mapLayerGroups = [];
 
 var featureTypes = {
-    'wayside_shrine': {type: 'wayside_shrine', color: '#3A01DF', title: 'Chapelle'},
-    'wayside_cross': {type: 'wayside_cross', color: 'yellow', title: 'Croix'},
-    'archaeological_site': {type: 'archaeological_site', color: '#B45F04', title: 'Site Archéologique'},
-    'castle': {type: 'castle', color: 'green', title: 'Châteaux'},
-    'ruins': {type: 'ruins', color: 'blue', title: 'Ruines'},
-    'camp_site': {type: 'camp_site', color: '#0f0', title: 'Camping'},
-    'caravan_site': {type: 'caravan_site', color: '#0f0', title: 'Aire pour Caravanes'},
-    'hotel': {type: 'hotel', color: '#ff0', title: 'Hôtel'},
-    'motel': {type: 'motel', color: '#ff0', title: 'Motel'},
-    'hostel': {type: 'hostel', color: '#ff0', title: 'Hôtel'},
-    'information': {type: 'information', color: '#0ff', title: 'Information'},
-    'picnic_site': {type: 'picnic_site', color: '#f0f', title: 'Aire de PicNic'},
-    'attraction': {type: 'attraction', color: '#B45F04', title: 'attraction'},
-    'zoo': {type: 'zoo', color: '#B45F04', title: 'zoo'},
-    'chalet': {type: 'chalet', color: '#DF013A', title: 'chalet'},
-    'guest_house': {type: 'guest_house', color: '#A901DB', title: 'guest_house'},
-    'bed_and_breakfast': {type: 'bed_and_breakfast', color: '#A901DB', title: 'bed_and_breakfast'},
-    'viewpoint': {type: 'viewpoint', color: '#3A01DF', title: 'Point de Vue'},
-    'museum': {type: 'museum', color: '#0174DF', title: 'Musée'},
-    'artwork': {type: 'artwork', color: '#D7DF01', title: 'Oeuvre d\'Art'}
+    'yes': 'wayside_shrine',
+    'monastery': 'wayside_shrine',
+    'wayside_shrine': 'wayside_shrine',
+    'wayside_cross': 'wayside_shrine',
+    'camp_site': 'camp_site',
+    'caravan_site': 'camp_site',
+    'apartment': 'hotel',
+    'hotel': 'hotel',
+    'motel': 'hotel',
+    'hostel': 'hotel',
+    'chalet': 'hotel',
+    'guest_house': 'hotel',
+    'bed_and_breakfast': 'hotel',
+    'information': 'information',
+    'picnic_site': 'picnic_site',
+    'attraction': 'attraction',
+    'theme_park': 'attraction',
+    'zoo': 'attraction',
+    'viewpoint': 'viewpoint',
+    'museum': 'artwork',
+    'artwork': 'artwork',
+    'archaeological_site': 'archaeological_site',
+    'castle': 'castle',
+    'ruins': 'ruins',
 };
+
+var typesTable = {
+    'wayside_shrine': {color: '#3A01DF', title: 'Chapelle'},
+    'archaeological_site': {color: '#B45F04', title: 'Site Archéologique'},
+    'castle': {color: 'green', title: 'Châteaux'},
+    'ruins': {color: 'blue', title: 'Ruines'},
+    'camp_site': {color: '#0f0', title: 'Camping'},
+    'hotel': {color: '#ff0', title: 'Hôtel'},
+    'information': {color: '#0ff', title: 'Information'},
+    'picnic_site': {color: '#f0f', title: 'Aire de PicNic'},
+    'attraction': {color: '#B45F04', title: 'Attraction'},
+    'viewpoint': {color: '#3A01DF', title: 'Point de Vue'},
+    'artwork': {color: '#D7DF01', title: 'Oeuvre d\'Art'}
+};
+
+
+function type2title( type ) {
+    return typesTable[type] ? typesTable[type].title : "no title";
+}
 
 /*
  * Get tourism or historic feature property value
@@ -40,8 +63,7 @@ function feature2type( feature ){
     } else if ( feature.properties.historic ){
         keyValue = feature.properties.historic;
     } 
-    var featureType = featureTypes[keyValue] ? featureTypes[keyValue].type : defaultType;
-    console.log( featureType);
+    var featureType = featureTypes[keyValue] ? featureTypes[keyValue] : defaultType;
     return featureType;
 }
 
@@ -70,10 +92,12 @@ function feature2popup( feature ){
 
 /*
  * dynamically fill toolbar
+ * From dynamical layer groups
  */
 function fillToolBar(){
-    for(var key in featureTypes ) {
-        var img = $('<img title="'+featureTypes[key].title+'" id="'+key+'" src="'+type2iconpath(key)+'"></li>');
+    for(var key in mapLayerGroups ) {
+        console.log( key );
+        var img = $('<img title="'+type2title( key )+'" id="'+key+'" src="'+type2iconpath(key)+'"></li>');
         img.click(function(){ toggleLayer( $(this).attr("id") ); $(this).toggleClass("shade")});
         var li = $("<li></li>");
         li.append( img );
