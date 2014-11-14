@@ -45,6 +45,22 @@ function type2iconpath( type ){
 }
 
 
+function feature2popup( feature ){
+    var popupcontent="";
+
+    if (feature.properties){
+        if ( feature.properties.name) {
+            popupcontent="name: "+feature.properties.name+"</br>";
+        }
+        if ( feature.properties.tourism){
+                popupcontent+="tourism: "+feature.properties.tourism;
+        }
+        if ( feature.properties.historic){
+                popupcontent+="historic: "+feature.properties.historic;
+        }
+    }
+}
+
 /*
  * dynamically fill toolbar
  */
@@ -101,19 +117,7 @@ function onEachFeature(feature, featureLayer) {
     var featureType = feature2type( feature );
 
     // create popup at click on feature
-    var popupcontent="";
-    if (feature.properties){
-        if ( feature.properties.name) {
-            popupcontent="name: "+feature.properties.name+"</br>";
-        }
-        if ( feature.properties.tourism){
-                popupcontent+="tourism: "+feature.properties.tourism;
-        }
-        if ( feature.properties.historic){
-                popupcontent+="historic: "+feature.properties.historic;
-        }
-    }
-    featureLayer.bindPopup(popupcontent);
+    featureLayer.bindPopup(feature2popup( feature));
 
     // now add to layer group based on type
     // ( from http://stackoverflow.com/questions/16148598/leaflet-update-geojson-filter )
@@ -211,7 +215,6 @@ var overLays = {
 
 // Layers switchers
 L.control.layers(baseLayers, overLays).setPosition('topright').addTo(map);
-//L.control.layers(baseLayers).setPosition('topright').addTo(map);
 
 // Scale at bottom left
 L.control.scale().addTo(map);
