@@ -59,6 +59,7 @@ function feature2popup( feature ){
                 popupcontent+="historic: "+feature.properties.historic;
         }
     }
+    return popupcontent;
 }
 
 /*
