@@ -1,0 +1,3 @@
+[submodule "js/lf-plugins/leaflet-ajax"]
+	path = js/lf-plugins/leaflet-ajax
+	url = https://github.com/calvinmetcalf/leaflet-ajax.git

@@ -1,4 +1,4 @@
-var historic_ruins = {
+{
 "type": "FeatureCollection",
 "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
                                                                                 
@@ -133,4 +133,4 @@ var historic_ruins = {
 { "type": "Feature", "properties": { "@id": "node\/3167038797", "historic": "ruins", "name": "Corral de l'Abrit" }, "geometry": { "type": "Point", "coordinates": [ 2.1772924, 42.5528094 ] } },
 { "type": "Feature", "properties": { "@id": "node\/3167038798", "historic": "ruins", "name": "Corral Gandal" }, "geometry": { "type": "Point", "coordinates": [ 2.1726629, 42.5490829 ] } }
 ]
-};
+}
