@@ -2,6 +2,15 @@
 
 A map to display the tourism POIs for your area.
 
+## Install
+
+As we use some external libraries as  gitsubmodule, 
+please, before running, make sure you 
+
+'git submodule update'
+
+ - thanks to leaflet-ajax from https://github.com/calvinmetcalf/leaflet-ajax
+
 
 ## TODO
 
