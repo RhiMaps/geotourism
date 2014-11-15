@@ -226,8 +226,14 @@ var audeContourLayer = L.geoJson.ajax( 'data/aude.json', {
     }
 }).addTo(map); 
 
-
-
+var limouxinLayer = L.geoJson.ajax( 'data/limouxin.json', {
+    smoothFactor: "5",
+    style: {
+    "opacity":"1",
+    "stroke-width": "2",
+    "stroke": "yellow",
+    }
+});
 
 var baseLayers = {
     "Satellite": esriLayer,
@@ -239,7 +245,8 @@ var baseLayers = {
 var overLays = {
     "Tourisme": tourismLayer, 
     "Histoire": historicLayer,
-//    "Aude": audeContourLayer
+    "Aude": audeContourLayer,
+    "Limouxin": limouxinLayer
 };
 
 // Layers switchers
