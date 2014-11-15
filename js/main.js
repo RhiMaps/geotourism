@@ -96,7 +96,6 @@ function feature2popup( feature ){
  */
 function fillToolBar(){
     for(var key in typesTable ) {
-        console.log( key );
         var img = $('<img title="'+type2title( key )+'" id="'+key+'" src="'+type2iconpath(key)+'"></li>');
         img.click(function(){ toggleLayer( $(this).attr("id") ); $(this).toggleClass("shade")});
         var li = $("<li></li>");
@@ -107,13 +106,13 @@ function fillToolBar(){
 
 
 // create a map in the "map" div, set the view to a given place and zoom
-var map = L.map('map');
-//var map = L.map('map', {
-//    center: myLL,
-//    zoom: z,
-//    maxZoom: 15,
-//    minZoom: 9
-//});
+//var map = L.map('map');
+var map = L.map('map', {
+    center: myLL,
+    zoom: z,
+    maxZoom: 15,
+    minZoom: 9
+});
 
 // add an OpenStreetMap tile layer
 var osmLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
@@ -207,6 +206,7 @@ function iconifyFeature( feature, latlng) {
 
    return L.marker(latlng, {icon: smallIcon});
 }
+var audeContourLayer = L.geoJson.ajax( 'data/aude.json').addTo(map);
 
 var tourismLayer = L.geoJson.ajax( 'data/tourisme-aude.json',{
     onEachFeature: onEachFeature,
@@ -218,15 +218,14 @@ var historicLayer = L.geoJson.ajax( 'data/historic-ruins.json',{
     pointToLayer: iconifyFeature, 
 }).addTo(map);
 
-
-var audeContourLayer = L.geoJson.ajax( 'data/aude.json', {
-    smoothFactor: "5",
-    style: {
-    "opacity":"1",
-    "stroke-width": "5",
-    "stroke": "blue",
-    }
-}).addTo(map); 
+//var audeContourLayer = L.geoJson.ajax( 'data/aude.json', {
+//    smoothFactor: "5",
+//    style: {
+//    "opacity":"1",
+//    "stroke-width": "5",
+//    "stroke": "blue",
+//    }
+//}).addTo(map); 
 
 
 
@@ -240,7 +239,8 @@ var baseLayers = {
 //
 var overLays = {
     "Tourisme": tourismLayer, 
-    "Histoire": historicLayer
+    "Histoire": historicLayer,
+//    "Aude": audeContourLayer
 };
 
 // Layers switchers
@@ -293,7 +293,7 @@ function toggleLayer( id ){
     }
 }
 
-map.fitBounds(audeContourLayer.getBounds());
+//map.fitBounds(audeContourLayer.getBounds());
 map.setMaxBounds( map.getBounds() );
-map.options.minZoom = map.getZoom();
+//map.options.minZoom = map.getZoom();
 fillToolBar();
