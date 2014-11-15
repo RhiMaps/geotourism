@@ -95,7 +95,7 @@ function feature2popup( feature ){
  * From dynamical layer groups
  */
 function fillToolBar(){
-    for(var key in mapLayerGroups ) {
+    for(var key in typesTable ) {
         console.log( key );
         var img = $('<img title="'+type2title( key )+'" id="'+key+'" src="'+type2iconpath(key)+'"></li>');
         img.click(function(){ toggleLayer( $(this).attr("id") ); $(this).toggleClass("shade")});
@@ -208,18 +208,18 @@ function iconifyFeature( feature, latlng) {
    return L.marker(latlng, {icon: smallIcon});
 }
 
-var tourismLayer = L.geoJson( tourismeaude,{
+var tourismLayer = L.geoJson.ajax( 'data/tourisme-aude.json',{
     onEachFeature: onEachFeature,
     pointToLayer: iconifyFeature, 
 }).addTo(map);
 
-var historicLayer = L.geoJson( historic_ruins,{
+var historicLayer = L.geoJson.ajax( 'data/historic-ruins.json',{
     onEachFeature: onEachFeature,
     pointToLayer: iconifyFeature, 
 }).addTo(map);
 
 
-var audeContourLayer = L.geoJson( audeContour, {
+var audeContourLayer = L.geoJson.ajax( 'data/aude.json', {
     smoothFactor: "5",
     style: {
     "opacity":"1",
