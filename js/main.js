@@ -90,21 +90,6 @@ function feature2popup( feature ){
     return popupcontent;
 }
 
-/*
- * dynamically fill toolbar
- * From dynamical layer groups
- */
-function fillToolBar(){
-    for(var key in typesTable ) {
-        var img = $('<img title="'+type2title( key )+'" id="'+key+'" src="'+type2iconpath(key)+'"></li>');
-        img.click(function(){ toggleLayer( $(this).attr("id") ); $(this).toggleClass("shade")});
-        var li = $("<li></li>");
-        li.append( img );
-        $("#toolbar").append(li);
-    }
-}
-
-
 // create a map in the "map" div, set the view to a given place and zoom
 //var map = L.map('map');
 var map = L.map('map', {
@@ -167,6 +152,7 @@ function onEachFeature(feature, featureLayer) {
     lg.addLayer(featureLayer);
     // add type to selected
     selectedLayers[featureType]=1;
+
 }
 
 function featureToColor( feature ){
@@ -222,16 +208,16 @@ var audeContourLayer = L.geoJson.ajax( 'data/aude.json', {
     style: {
     "opacity":"1",
     "stroke-width": "5",
-    "stroke": "blue",
+    "color": "green",
     }
 }).addTo(map); 
 
 var limouxinLayer = L.geoJson.ajax( 'data/limouxin.json', {
-    smoothFactor: "5",
+    smoothFactor: "1",
     style: {
     "opacity":"1",
     "stroke-width": "2",
-    "stroke": "yellow",
+    "color": "yellow",
     }
 });
 
@@ -298,6 +284,21 @@ function toggleLayer( id ){
         delete selectedLayers[id];
     }
 }
+
+/*
+ * dynamically fill toolbar
+ * From dynamical layer groups
+ */
+function fillToolBar(){
+    for(var key in typesTable ) {
+        var img = $('<img title="'+type2title( key )+'" id="'+key+'" src="'+type2iconpath(key)+'"></li>');
+        img.click(function(){ toggleLayer( $(this).attr("id") ); $(this).toggleClass("shade")});
+        var li = $("<li></li>");
+        li.append( img );
+        $("#toolbar").append(li);
+    }
+}
+
 
 //map.fitBounds(audeContourLayer.getBounds());
 map.setMaxBounds( map.getBounds() );
