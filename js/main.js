@@ -2,40 +2,68 @@ var z = 10;
 var myLL = L.latLng(43.03,2.48);
 var defaultColor="#ff7800";
 var defaultIcon="default";
+var defaultType="default";
 var selectedType="information";
 var selectedLayers = [];
 var mapLayerGroups = [];
 
 var featureTypes = {
+    'yes': 'wayside_shrine',
+    'monastery': 'wayside_shrine',
+    'wayside_shrine': 'wayside_shrine',
+    'wayside_cross': 'wayside_shrine',
+    'camp_site': 'camp_site',
+    'caravan_site': 'camp_site',
+    'apartment': 'hotel',
+    'hotel': 'hotel',
+    'motel': 'hotel',
+    'hostel': 'hotel',
+    'chalet': 'hotel',
+    'guest_house': 'hotel',
+    'bed_and_breakfast': 'hotel',
+    'information': 'information',
+    'picnic_site': 'picnic_site',
+    'attraction': 'attraction',
+    'theme_park': 'attraction',
+    'zoo': 'attraction',
+    'viewpoint': 'viewpoint',
+    'museum': 'artwork',
+    'artwork': 'artwork',
+    'archaeological_site': 'archaeological_site',
+    'castle': 'castle',
+    'ruins': 'ruins',
+};
+
+var typesTable = {
     'wayside_shrine': {color: '#3A01DF', title: 'Chapelle'},
-    'wayside_cross': {color: 'yellow', title: 'Croix'},
     'archaeological_site': {color: '#B45F04', title: 'Site Archéologique'},
     'castle': {color: 'green', title: 'Châteaux'},
     'ruins': {color: 'blue', title: 'Ruines'},
     'camp_site': {color: '#0f0', title: 'Camping'},
-    'caravan_site': {color: '#0f0', title: 'Aire pour Caravanes'},
     'hotel': {color: '#ff0', title: 'Hôtel'},
-    'motel': {color: '#ff0', title: 'Motel'},
-    'hostel': {color: '#ff0', title: 'Hôtel'},
     'information': {color: '#0ff', title: 'Information'},
     'picnic_site': {color: '#f0f', title: 'Aire de PicNic'},
-    'attraction': {color: '#B45F04', title: 'attraction'},
-    'zoo': {color: '#B45F04', title: 'zoo'},
-    'chalet': {color: '#DF013A', title: 'chalet'},
-    'guest_house': {color: '#A901DB', title: 'guest_house'},
-    'bed_and_breakfast': {color: '#A901DB', title: 'bed_and_breakfast'},
+    'attraction': {color: '#B45F04', title: 'Attraction'},
     'viewpoint': {color: '#3A01DF', title: 'Point de Vue'},
-    'museum': {color: '#0174DF', title: 'Musée'},
     'artwork': {color: '#D7DF01', title: 'Oeuvre d\'Art'}
 };
+
+
+function type2title( type ) {
+    return typesTable[type] ? typesTable[type].title : "no title";
+}
 
 /*
  * Get tourism or historic feature property value
  */
 function feature2type( feature ){
-    var tourismVal = feature.properties.tourism;
-    var historicVal = feature.properties.historic;
-    var featureType = historicVal ? historicVal : tourismVal;
+    var keyValue = "none";
+    if ( feature.properties.tourism ){
+        keyValue = feature.properties.tourism;
+    } else if ( feature.properties.historic ){
+        keyValue = feature.properties.historic;
+    } 
+    var featureType = featureTypes[keyValue] ? featureTypes[keyValue] : defaultType;
     return featureType;
 }
 
@@ -45,12 +73,31 @@ function type2iconpath( type ){
 }
 
 
+function feature2popup( feature ){
+    var popupcontent="";
+
+    if (feature.properties){
+        if ( feature.properties.name) {
+            popupcontent="name: "+feature.properties.name+"</br>";
+        }
+        if ( feature.properties.tourism){
+                popupcontent+="tourism: "+feature.properties.tourism;
+        }
+        if ( feature.properties.historic){
+                popupcontent+="historic: "+feature.properties.historic;
+        }
+    }
+    return popupcontent;
+}
+
 /*
  * dynamically fill toolbar
+ * From dynamical layer groups
  */
 function fillToolBar(){
-    for(var key in featureTypes ) {
-        var img = $('<img title="'+featureTypes[key].title+'" id="'+key+'" src="'+type2iconpath(key)+'"></li>');
+    for(var key in mapLayerGroups ) {
+        console.log( key );
+        var img = $('<img title="'+type2title( key )+'" id="'+key+'" src="'+type2iconpath(key)+'"></li>');
         img.click(function(){ toggleLayer( $(this).attr("id") ); $(this).toggleClass("shade")});
         var li = $("<li></li>");
         li.append( img );
@@ -101,24 +148,11 @@ function onEachFeature(feature, featureLayer) {
     var featureType = feature2type( feature );
 
     // create popup at click on feature
-    var popupcontent="";
-    if (feature.properties){
-        if ( feature.properties.name) {
-            popupcontent="name: "+feature.properties.name+"</br>";
-        }
-        if ( feature.properties.tourism){
-                popupcontent+="tourism: "+feature.properties.tourism;
-        }
-        if ( feature.properties.historic){
-                popupcontent+="historic: "+feature.properties.historic;
-        }
-    }
-    featureLayer.bindPopup(popupcontent);
+    featureLayer.bindPopup(feature2popup( feature));
 
     // now add to layer group based on type
     // ( from http://stackoverflow.com/questions/16148598/leaflet-update-geojson-filter )
     //
-
     // does layerGroup already exist? if not create it and add to map
     var lg = mapLayerGroups[featureType];
 
@@ -211,7 +245,6 @@ var overLays = {
 
 // Layers switchers
 L.control.layers(baseLayers, overLays).setPosition('topright').addTo(map);
-//L.control.layers(baseLayers).setPosition('topright').addTo(map);
 
 // Scale at bottom left
 L.control.scale().addTo(map);
