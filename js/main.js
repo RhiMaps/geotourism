@@ -217,7 +217,7 @@ var historicLayer = L.geoJson.ajax( 'data/historic-ruins.json',{
     pointToLayer: iconifyFeature, 
 }).addTo(map);
 
-var audeContourLayer = L.geoJson.ajax( 'data/another.json', {
+var audeContourLayer = L.geoJson.ajax( 'data/aude.json', {
     smoothFactor: "5",
     style: {
     "opacity":"1",
