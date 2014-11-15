@@ -206,7 +206,6 @@ function iconifyFeature( feature, latlng) {
 
    return L.marker(latlng, {icon: smallIcon});
 }
-var audeContourLayer = L.geoJson.ajax( 'data/aude.json').addTo(map);
 
 var tourismLayer = L.geoJson.ajax( 'data/tourisme-aude.json',{
     onEachFeature: onEachFeature,
@@ -218,14 +217,14 @@ var historicLayer = L.geoJson.ajax( 'data/historic-ruins.json',{
     pointToLayer: iconifyFeature, 
 }).addTo(map);
 
-//var audeContourLayer = L.geoJson.ajax( 'data/aude.json', {
-//    smoothFactor: "5",
-//    style: {
-//    "opacity":"1",
-//    "stroke-width": "5",
-//    "stroke": "blue",
-//    }
-//}).addTo(map); 
+var audeContourLayer = L.geoJson.ajax( 'data/another.json', {
+    smoothFactor: "5",
+    style: {
+    "opacity":"1",
+    "stroke-width": "5",
+    "stroke": "blue",
+    }
+}).addTo(map); 
 
 
 
