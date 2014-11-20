@@ -8,8 +8,8 @@ img {
 }
 
 img.leaflet-marker-icon {
-    width: 25px !important;
-    height: 25px !important;
+    width: 32px !important;
+    height: 32px !important;
 }
 
 #toolbar { 
@@ -28,8 +28,8 @@ img.leaflet-marker-icon {
 #toolbar img {
     background-color: lightgrey;
     border: solid white 1pt ;
-    width: 26px;
-    height: 26px;
+    width: 29px;
+    height: 29px;
 }
 #toolbar li:hover img {
     background-color: white !important;
