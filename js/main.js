@@ -293,7 +293,7 @@ var historicLayer = L.geoJson.ajax('data/historic-ruins.json', {
 });
 
 var audeContourLayer = L.geoJson.ajax('data/aude.json', {
-    smoothFactor: "5",
+    smoothFactor: "1",
     style: {
         "opacity": "1",
         "weight": "2",
