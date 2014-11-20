@@ -261,16 +261,19 @@ var audeContourLayer = L.geoJson.ajax('data/aude.json', {
     smoothFactor: "5",
     style: {
         "opacity": "1",
-        "stroke-width": "5",
+        "weight": "2",
         "color": "green",
+        "fillOpacity": "0.1",
+        "fillColor": "yellow",
     }
 }).addTo(map);
 
 var limouxinLayer = L.geoJson.ajax('data/limouxin.json', {
     smoothFactor: "1",
     style: {
+        "fillOpacity": "0",
         "opacity": "1",
-        "stroke-width": "2",
+        "weight": "2",
         "color": "yellow",
     }
 });
