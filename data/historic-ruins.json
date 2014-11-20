@@ -46,7 +46,7 @@
 { "type": "Feature", "properties": { "@id": "node\/1786249492", "historic": "monastery", "name": "Prieuré de Saint-Jean" }, "geometry": { "type": "Point", "coordinates": [ 2.5261125, 43.1626857 ] } },
 { "type": "Feature", "properties": { "@id": "node\/1794441121", "historic": "ruins", "name": "Tour d'Escales" }, "geometry": { "type": "Point", "coordinates": [ 2.7036893, 43.2190687 ] } },
 { "type": "Feature", "properties": { "@id": "node\/1795579990", "historic": "castle", "name": "Château de Roquecourbe-Minervois" }, "geometry": { "type": "Point", "coordinates": [ 2.6485438, 43.2206233 ] } },
-{ "type": "Feature", "properties": { "@id": "node\/1805880699", "historic": "ruins", "name": "Ancienne cathédrale Notre-Dame" }, "geometry": { "type": "Point", "coordinates": [ 2.255245, 42.9958914 ] } },
+{ "type": "Feature", "properties": { "@id": "node\/1805880699", "historic": "ruins", "name": "Abbaye d'Alet-les-Bains" }, "geometry": { "type": "Point", "coordinates": [ 2.255245, 42.9958914 ] } },
 { "type": "Feature", "properties": { "@id": "node\/1811101264", "historic": "ruins", "name": "Tour" }, "geometry": { "type": "Point", "coordinates": [ 2.2639536, 42.921137 ] } },
 { "type": "Feature", "properties": { "@id": "node\/1836768582", "historic": "castle", "name": "Château de Chalabre" }, "geometry": { "type": "Point", "coordinates": [ 2.0094047, 42.9834646 ] } },
 { "type": "Feature", "properties": { "@id": "node\/1874337079", "historic": "ruins", "name": "Moulin en ruine" }, "geometry": { "type": "Point", "coordinates": [ 2.1555603, 42.9347291 ] } },
