@@ -8,7 +8,7 @@ var selectedLayers = [];
 var mapLayerGroups = [];
 
 var featureTypes = {
-    'yes': 'wayside_shrine',
+    'yes': 'attraction',
     'monastery': 'wayside_shrine',
     'wayside_shrine': 'wayside_shrine',
     'wayside_cross': 'wayside_shrine',
@@ -160,7 +160,7 @@ function feature2popup(feature) {
 var map = L.map('map', {
     center: myLL,
     zoom: z,
-    maxZoom: 15,
+    maxZoom: 17,
     minZoom: 9
 });
 
