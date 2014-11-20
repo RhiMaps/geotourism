@@ -316,9 +316,9 @@ var limouxinLayer = L.geoJson.ajax('data/limouxin.json', {
 
 var baseLayers = {
     "Satellite": esriLayer,
-    "OSM": osmLayer,
-    "MapBox": mapqLayer,
-    "Topographique": worldTopoLayer,
+    //"OSM": osmLayer,
+    //"MapBox": mapqLayer,
+    //"Topographique": worldTopoLayer,
     "Street": worldStreetLayer,
     "Gouache": waterColorLayer,
     "Forêts": forestLayer
