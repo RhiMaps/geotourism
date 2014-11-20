@@ -1,9 +1,9 @@
 var z = 10;
-var myLL = L.latLng(43.03,2.48);
-var defaultColor="#ff7800";
-var defaultIcon="default";
-var defaultType="default";
-var selectedType="information";
+var myLL = L.latLng(43.03, 2.48);
+var defaultColor = "#ff7800";
+var defaultIcon = "default";
+var defaultType = "default";
+var selectedType = "information";
 var selectedLayers = [];
 var mapLayerGroups = [];
 
@@ -35,56 +35,89 @@ var featureTypes = {
 };
 
 var typesTable = {
-    'wayside_shrine': {color: '#3A01DF', title: 'Chapelle'},
-    'archaeological_site': {color: '#B45F04', title: 'Site Archéologique'},
-    'castle': {color: 'green', title: 'Châteaux'},
-    'ruins': {color: 'blue', title: 'Ruines'},
-    'camp_site': {color: '#0f0', title: 'Camping'},
-    'hotel': {color: '#ff0', title: 'Hôtel'},
-    'information': {color: '#0ff', title: 'Information'},
-    'picnic_site': {color: '#f0f', title: 'Aire de PicNic'},
-    'attraction': {color: '#B45F04', title: 'Attraction'},
-    'viewpoint': {color: '#3A01DF', title: 'Point de Vue'},
-    'artwork': {color: '#D7DF01', title: 'Oeuvre d\'Art'}
+    'wayside_shrine': {
+        color: '#3A01DF',
+        title: 'Chapelle'
+    },
+    'archaeological_site': {
+        color: '#B45F04',
+        title: 'Site Archéologique'
+    },
+    'castle': {
+        color: 'green',
+        title: 'Châteaux'
+    },
+    'ruins': {
+        color: 'blue',
+        title: 'Ruines'
+    },
+    'camp_site': {
+        color: '#0f0',
+        title: 'Camping'
+    },
+    'hotel': {
+        color: '#ff0',
+        title: 'Hôtel'
+    },
+    'information': {
+        color: '#0ff',
+        title: 'Information'
+    },
+    'picnic_site': {
+        color: '#f0f',
+        title: 'Aire de PicNic'
+    },
+    'attraction': {
+        color: '#B45F04',
+        title: 'Attraction'
+    },
+    'viewpoint': {
+        color: '#3A01DF',
+        title: 'Point de Vue'
+    },
+    'artwork': {
+        color: '#D7DF01',
+        title: 'Oeuvre d\'Art'
+    }
 };
 
 
-function type2title( type ) {
+function type2title(type) {
     return typesTable[type] ? typesTable[type].title : "no title";
 }
 
 /*
  * Get tourism or historic feature property value
  */
-function feature2type( feature ){
+function feature2type(feature) {
     var keyValue = "none";
-    if ( feature.properties.tourism ){
+    if (feature.properties.tourism) {
         keyValue = feature.properties.tourism;
-    } else if ( feature.properties.historic ){
+    } else if (feature.properties.historic) {
         keyValue = feature.properties.historic;
-    } 
+    }
     var featureType = featureTypes[keyValue] ? featureTypes[keyValue] : defaultType;
     return featureType;
 }
 
-function type2iconpath( type ){
-    var value = featureTypes[type] ? type: defaultIcon;
-    return "data/icons/"+value+".png";
+function type2iconpath(type) {
+    var value = featureTypes[type] ? type : defaultIcon;
+    return "data/icons/" + value + ".png";
 }
 
 
-function feature2popup( feature ){
-    var popupcontent="";
+function feature2popup(feature) {
+    var popupcontent = "";
 
-    if (feature.properties){
-        if ( feature.properties.name) {
-            popupcontent="name: "+feature.properties.name+"</br>";
+    if (feature.properties) {
+        if (feature.properties.name) {
+            popupcontent = "name: " + feature.properties.name + "</br>";
         }
-        if ( feature.properties.tourism){
-                popupcontent+="tourism: "+feature.properties.tourism;
+        if (feature.properties.tourism) {
+            popupcontent += "tourism: " + feature.properties.tourism;
         }
-        if ( feature.properties.historic){
-                popupcontent+="historic: "+feature.properties.historic;
+        if (feature.properties.historic) {
+            popupcontent += "historic: " + feature.properties.historic;
         }
     }
     return popupcontent;
@@ -115,13 +148,13 @@ var mapqLayer = L.tileLayer('http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.pn
 
 function onEachHistoric(feature, featureLayer) {
     // create popup at click on feature
-    var popupcontent="";
-    if (feature.properties){
-        if ( feature.properties.name) {
-            popupcontent="name: "+feature.properties.name+"</br>";
+    var popupcontent = "";
+    if (feature.properties) {
+        if (feature.properties.name) {
+            popupcontent = "name: " + feature.properties.name + "</br>";
         }
-        if ( feature.properties.historic){
-            popupcontent+="historic: "+feature.properties.historic;
+        if (feature.properties.historic) {
+            popupcontent += "historic: " + feature.properties.historic;
         }
     }
     featureLayer.bindPopup(popupcontent);
@@ -129,10 +162,10 @@ function onEachHistoric(feature, featureLayer) {
 
 function onEachFeature(feature, featureLayer) {
 
-    var featureType = feature2type( feature );
+    var featureType = feature2type(feature);
 
     // create popup at click on feature
-    featureLayer.bindPopup(feature2popup( feature));
+    featureLayer.bindPopup(feature2popup(feature));
 
     // now add to layer group based on type
     // ( from http://stackoverflow.com/questions/16148598/leaflet-update-geojson-filter )
@@ -151,14 +184,14 @@ function onEachFeature(feature, featureLayer) {
     //add the feature to the layer
     lg.addLayer(featureLayer);
     // add type to selected
-    selectedLayers[featureType]=1;
+    selectedLayers[featureType] = 1;
 
 }
 
-function featureToColor( feature ){
+function featureToColor(feature) {
     var color = "red"
-   var historicVal = feature.properties.historic;
-    if (  historicVal && featureTypes[historicVal] ) {
+    var historicVal = feature.properties.historic;
+    if (historicVal && featureTypes[historicVal]) {
         color = featureTypes[historicVal].color;
     }
     return color;
@@ -166,58 +199,60 @@ function featureToColor( feature ){
 
 function colorizeFeature(feature, latlng) {
 
-    var color = featureToColor( feature); 
+    var color = featureToColor(feature);
     var geojsonMarkerOptions = {
-            radius: 8,
-            fillColor: color,
-            color: "#000",
-            weight: 1,
-            opacity: 1,
-            fillOpacity: 0.8
-        };
+        radius: 8,
+        fillColor: color,
+        color: "#000",
+        weight: 1,
+        opacity: 1,
+        fillOpacity: 0.8
+    };
     return L.circleMarker(latlng, geojsonMarkerOptions);
 }
 
-function iconifyFeature( feature, latlng) {
+function iconifyFeature(feature, latlng) {
 
-   var featureType = feature2type( feature ) ;
-   var iconPath = type2iconpath( featureType );
+    var featureType = feature2type(feature);
+    var iconPath = type2iconpath(featureType);
 
-   var smallIcon = L.icon({
-                      iconSize: [27, 27],
-                      iconAnchor: [13, 27],
-                      popupAnchor:  [1, -24],
-                      iconUrl: iconPath
-   });
+    var smallIcon = L.icon({
+        iconSize: [27, 27],
+        iconAnchor: [13, 27],
+        popupAnchor: [1, -24],
+        iconUrl: iconPath
+    });
 
-   return L.marker(latlng, {icon: smallIcon});
+    return L.marker(latlng, {
+        icon: smallIcon
+    });
 }
 
-var tourismLayer = L.geoJson.ajax( 'data/tourisme-aude.json',{
+var tourismLayer = L.geoJson.ajax('data/tourisme-aude.json', {
     onEachFeature: onEachFeature,
-    pointToLayer: iconifyFeature, 
+    pointToLayer: iconifyFeature,
 }).addTo(map);
 
-var historicLayer = L.geoJson.ajax( 'data/historic-ruins.json',{
+var historicLayer = L.geoJson.ajax('data/historic-ruins.json', {
     onEachFeature: onEachFeature,
-    pointToLayer: iconifyFeature, 
+    pointToLayer: iconifyFeature,
 }).addTo(map);
 
-var audeContourLayer = L.geoJson.ajax( 'data/aude.json', {
+var audeContourLayer = L.geoJson.ajax('data/aude.json', {
     smoothFactor: "5",
     style: {
-    "opacity":"1",
-    "stroke-width": "5",
-    "color": "green",
+        "opacity": "1",
+        "stroke-width": "5",
+        "color": "green",
     }
-}).addTo(map); 
+}).addTo(map);
 
-var limouxinLayer = L.geoJson.ajax( 'data/limouxin.json', {
+var limouxinLayer = L.geoJson.ajax('data/limouxin.json', {
     smoothFactor: "1",
     style: {
-    "opacity":"1",
-    "stroke-width": "2",
-    "color": "yellow",
+        "opacity": "1",
+        "stroke-width": "2",
+        "color": "yellow",
     }
 });
 
@@ -229,7 +264,7 @@ var baseLayers = {
 
 //
 var overLays = {
-    "Tourisme": tourismLayer, 
+    "Tourisme": tourismLayer,
     "Histoire": historicLayer,
     "Aude": audeContourLayer,
     "Limouxin": limouxinLayer
@@ -256,31 +291,32 @@ L.control.scale().addTo(map);
 
 
 /*
-* show/hide layerGroup   
-*/
+ * show/hide layerGroup
+ */
 function showLayer(id) {
     var lg = mapLayerGroups[id];
-    map.addLayer(lg);   
+    map.addLayer(lg);
 }
+
 function hideLayer(id) {
     var lg = mapLayerGroups[id];
-    map.removeLayer(lg);   
+    map.removeLayer(lg);
 }
-function showOnlyLayer(id){
-    selectedType=id;
-    for(var key in mapLayerGroups )
-    {
-        hideLayer( key );
+
+function showOnlyLayer(id) {
+    selectedType = id;
+    for (var key in mapLayerGroups) {
+        hideLayer(key);
     }
     showLayer(id);
 }
 
-function toggleLayer( id ){
-    if ( selectedLayers[id] === undefined ){
-        showLayer( id );
-        selectedLayers[id]=1;
-    }else{
-        hideLayer( id );
+function toggleLayer(id) {
+    if (selectedLayers[id] === undefined) {
+        showLayer(id);
+        selectedLayers[id] = 1;
+    } else {
+        hideLayer(id);
         delete selectedLayers[id];
     }
 }
@@ -289,18 +325,21 @@ function toggleLayer( id ){
  * dynamically fill toolbar
  * From dynamical layer groups
  */
-function fillToolBar(){
-    for(var key in typesTable ) {
-        var img = $('<img title="'+type2title( key )+'" id="'+key+'" src="'+type2iconpath(key)+'"></li>');
-        img.click(function(){ toggleLayer( $(this).attr("id") ); $(this).toggleClass("shade")});
+function fillToolBar() {
+    for (var key in typesTable) {
+        var img = $('<img title="' + type2title(key) + '" id="' + key + '" src="' + type2iconpath(key) + '"></li>');
+        img.click(function() {
+            toggleLayer($(this).attr("id"));
+            $(this).toggleClass("shade")
+        });
         var li = $("<li></li>");
-        li.append( img );
+        li.append(img);
         $("#toolbar").append(li);
     }
 }
 
 
 //map.fitBounds(audeContourLayer.getBounds());
-map.setMaxBounds( map.getBounds() );
+map.setMaxBounds(map.getBounds());
 //map.options.minZoom = map.getZoom();
 fillToolBar();
