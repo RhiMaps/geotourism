@@ -37,47 +37,58 @@ var featureTypes = {
 var typesTable = {
     'wayside_shrine': {
         color: '#3A01DF',
-        title: 'Chapelle'
+        title: 'Chapelle',
+        show: false
     },
     'archaeological_site': {
         color: '#B45F04',
-        title: 'Site Archéologique'
+        title: 'Site Archéologique',
+        show: false
     },
     'castle': {
         color: 'green',
-        title: 'Châteaux'
+        title: 'Châteaux',
+        show: false
     },
     'ruins': {
         color: 'blue',
-        title: 'Ruines'
+        title: 'Ruines',
+        show: false
     },
     'camp_site': {
         color: '#0f0',
-        title: 'Camping'
+        title: 'Camping',
+        show: false
     },
     'hotel': {
         color: '#ff0',
-        title: 'Hôtel'
+        title: 'Hôtel',
+        show: false
     },
     'information': {
         color: '#0ff',
-        title: 'Information'
+        title: 'Information',
+        show: false
     },
     'picnic_site': {
         color: '#f0f',
-        title: 'Aire de PicNic'
+        title: 'Aire de PicNic',
+        show: false
     },
     'attraction': {
         color: '#B45F04',
-        title: 'Attraction'
+        title: 'Attraction',
+        show: false
     },
     'viewpoint': {
         color: '#3A01DF',
-        title: 'Point de Vue'
+        title: 'Point de Vue',
+        show: false
     },
     'artwork': {
         color: '#D7DF01',
-        title: 'Oeuvre d\'Art'
+        title: 'Oeuvre d\'Art',
+        show: true
     }
 };
 
@@ -85,6 +96,7 @@ var typesTable = {
 function type2title(type) {
     return typesTable[type] ? typesTable[type].title : "no title";
 }
+
 
 /*
  * Get tourism or historic feature property value
@@ -135,7 +147,7 @@ var map = L.map('map', {
 // add an OpenStreetMap tile layer
 var osmLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
     attribution: 'OpenStreetMap'
-}).addTo(map);
+});
 
 var forestLayer = L.tileLayer('http://{s}.tile.thunderforest.com/landscape/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://www.opencyclemap.org">OpenCycleMap</a>, &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
@@ -147,7 +159,7 @@ var worldTopoLayer = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/ser
 
 var worldStreetLayer = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
     attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012'
-});
+}).addTo(map);
 
 var waterColorLayer = L.tileLayer('http://{s}.tile.stamen.com/watercolor/{z}/{x}/{y}.png', {
     attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
@@ -195,7 +207,7 @@ function onEachFeature(feature, featureLayer) {
     if (lg === undefined) {
         lg = new L.layerGroup();
         //add the layer to the map
-        lg.addTo(map);
+        //lg.addTo(map);
         //store layer
         mapLayerGroups[featureType] = lg;
     }
@@ -250,12 +262,12 @@ function iconifyFeature(feature, latlng) {
 var tourismLayer = L.geoJson.ajax('data/tourisme-aude.json', {
     onEachFeature: onEachFeature,
     pointToLayer: iconifyFeature,
-}).addTo(map);
+});
 
 var historicLayer = L.geoJson.ajax('data/historic-ruins.json', {
     onEachFeature: onEachFeature,
     pointToLayer: iconifyFeature,
-}).addTo(map);
+});
 
 var audeContourLayer = L.geoJson.ajax('data/aude.json', {
     smoothFactor: "5",
@@ -271,10 +283,11 @@ var audeContourLayer = L.geoJson.ajax('data/aude.json', {
 var limouxinLayer = L.geoJson.ajax('data/limouxin.json', {
     smoothFactor: "1",
     style: {
-        "fillOpacity": "0",
-        "opacity": "1",
+        "fillOpacity": "0.1",
+        "fillColor": "#800000",
+        "opacity": "0.5",
         "weight": "2",
-        "color": "yellow",
+        "color": "black",
     }
 });
 
@@ -290,8 +303,8 @@ var baseLayers = {
 
 //
 var overLays = {
-    "Tourisme": tourismLayer,
-    "Histoire": historicLayer,
+    //"Tourisme": tourismLayer,
+    //"Histoire": historicLayer,
     "Aude": audeContourLayer,
     "Limouxin": limouxinLayer
 };
@@ -345,6 +358,7 @@ function toggleLayer(id) {
         hideLayer(id);
         delete selectedLayers[id];
     }
+    $("#" + id).toggleClass("shade");
 }
 
 /*
@@ -356,7 +370,6 @@ function fillToolBar() {
         var img = $('<img title="' + type2title(key) + '" id="' + key + '" src="' + type2iconpath(key) + '"></li>');
         img.click(function() {
             toggleLayer($(this).attr("id"));
-            $(this).toggleClass("shade")
         });
         var li = $("<li></li>");
         li.append(img);
