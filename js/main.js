@@ -48,12 +48,12 @@ var typesTable = {
     'castle': {
         color: 'green',
         title: 'Châteaux',
-        show: false
+        show: true
     },
     'ruins': {
         color: 'blue',
         title: 'Ruines',
-        show: false
+        show: true
     },
     'camp_site': {
         color: '#0f0',
@@ -88,7 +88,7 @@ var typesTable = {
     'artwork': {
         color: '#D7DF01',
         title: 'Oeuvre d\'Art',
-        show: true
+        show: false
     }
 };
 
@@ -110,6 +110,14 @@ function feature2type(feature) {
     }
     var featureType = featureTypes[keyValue] ? featureTypes[keyValue] : defaultType;
     return featureType;
+}
+
+function type2class(type) {
+    var returnedClass="shade";
+    if(  typesTable[type] && typesTable[type].show  ){
+        returnedClass="high";
+    }
+    return returnedClass;
 }
 
 function type2iconpath(type) {
@@ -206,16 +214,19 @@ function onEachFeature(feature, featureLayer) {
 
     if (lg === undefined) {
         lg = new L.layerGroup();
-        //add the layer to the map
-        //lg.addTo(map);
         //store layer
         mapLayerGroups[featureType] = lg;
+        if(  typesTable[featureType] && typesTable[featureType].show  ){
+            console.log( featureType+" allowed ("+typesTable[featureType].show+")");
+            // add type to selected
+            selectedLayers[featureType] = 1;
+            //add the layer to the map
+            lg.addTo(map);
+        }
     }
 
     //add the feature to the layer
     lg.addLayer(featureLayer);
-    // add type to selected
-    selectedLayers[featureType] = 1;
 
 }
 
@@ -289,7 +300,7 @@ var limouxinLayer = L.geoJson.ajax('data/limouxin.json', {
         "weight": "2",
         "color": "black",
     }
-});
+}).addTo(map);
 
 var baseLayers = {
     "Satellite": esriLayer,
@@ -303,8 +314,6 @@ var baseLayers = {
 
 //
 var overLays = {
-    //"Tourisme": tourismLayer,
-    //"Histoire": historicLayer,
     "Aude": audeContourLayer,
     "Limouxin": limouxinLayer
 };
@@ -358,7 +367,7 @@ function toggleLayer(id) {
         hideLayer(id);
         delete selectedLayers[id];
     }
-    $("#" + id).toggleClass("shade");
+    $("#"+id).toggleClass("shade");
 }
 
 /*
@@ -367,7 +376,7 @@ function toggleLayer(id) {
  */
 function fillToolBar() {
     for (var key in typesTable) {
-        var img = $('<img title="' + type2title(key) + '" id="' + key + '" src="' + type2iconpath(key) + '"></li>');
+        var img = $('<img title="' + type2title(key) + '" id="' + key + '" class="'+type2class(key)+'" src="' + type2iconpath(key) + '"></li>');
         img.click(function() {
             toggleLayer($(this).attr("id"));
         });
