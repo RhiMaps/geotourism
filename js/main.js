@@ -131,13 +131,25 @@ function feature2popup(feature) {
 
     if (feature.properties) {
         if (feature.properties.name) {
-            popupcontent = "name: " + feature.properties.name + "</br>";
+            popupcontent = '<p class="poiname"> ' + feature.properties.name + '</p>';
         }
-        if (feature.properties.tourism) {
-            popupcontent += "tourism: " + feature.properties.tourism;
+        //if (feature.properties.tourism) {
+        //    popupcontent += "tourism: " + feature.properties.tourism;
+        //}
+        //if (feature.properties.historic) {
+        //    popupcontent += "historic: " + feature.properties.historic;
+        //}
+        if (feature.properties["@id"] && "node/1753876165"==feature.properties["@id"]){
+            popupcontent += '<a href="http://fr.wikipedia.org/wiki/Belcastel-et-Buc">Belcastel-et-Buc sur wikipedia</a>';
+            popupcontent += '<img src="data/photos/belcastel.jpg" class="poimg"/>';
         }
-        if (feature.properties.historic) {
-            popupcontent += "historic: " + feature.properties.historic;
+        if (feature.properties["@id"] && "node/1753686821"==feature.properties["@id"]){
+            popupcontent += '<a href="http://www.audecathare.fr/abbayes/eglise_saint_polycarpe.htm">Saint Polycarpe sur audecathare.fr</a>';
+            popupcontent += '<img src="data/photos/polycarpe.jpg" class="poimg"/>';
+        }
+        if (feature.properties["@id"] && "node/1805880699"==feature.properties["@id"]){
+            popupcontent += '<a href="http://fr.wikipedia.org/wiki/Abbaye_d%27Alet-les-Bains">L\'abbaye sur wikipedia</a>';
+            popupcontent += '<img src="data/photos/alet.jpg" class="poimg"/>';
         }
     }
     return popupcontent;

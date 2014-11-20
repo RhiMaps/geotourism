@@ -38,3 +38,10 @@ img.shade {
     background-color: darkgrey !important;
     border: solid black 1pt !important;
 }
+
+img.poimg {
+    width: 250px;
+}
+p.poiname {
+    font-weight: 900;
+}
