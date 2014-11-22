@@ -300,7 +300,8 @@ var audeContourLayer = L.geoJson.ajax('data/aude.json', {
         "color": "green",
         "fillOpacity": "0.1",
         "fillColor": "yellow",
-    }
+    },
+    onEachFeature: onEachContour
 }).addTo(map);
 
 var limouxinLayer = L.geoJson.ajax('data/limouxin.json', {
@@ -311,8 +312,33 @@ var limouxinLayer = L.geoJson.ajax('data/limouxin.json', {
         "opacity": "0.5",
         "weight": "2",
         "color": "black",
-    }
+    },
+  onEachFeature: onEachContour
 }).addTo(map);
+
+function onEachContour(feature, layer) {
+    layer.on({
+      mouseover: highlightFeature,
+      mouseout: resetHighlight,
+      click: zoomToFeature
+    });
+  }
+
+function resetHighlight(e){
+    e.target.setStyle({
+        "opacity": "0.5",
+        "fillOpacity": "0.1",
+    });
+}
+function highlightFeature(e){
+    e.target.setStyle({
+        "opacity": "0.9",
+        "fillOpacity": "0.5",
+    });
+}
+function zoomToFeature(e) {
+    map.fitBounds(e.target.getBounds());
+}
 
 var baseLayers = {
     "Satellite": esriLayer,
