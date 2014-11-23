@@ -87,7 +87,7 @@ var typesTable = {
     },
     'artwork': {
         color: '#D7DF01',
-        title: 'Oeuvre d\'Art',
+        title: 'Art et Culture',
         show: false
     }
 };
@@ -388,12 +388,12 @@ function toggleLayer(id) {
  */
 function fillToolBar() {
     for (var key in typesTable) {
-        var img = $('<img title="' + type2title(key) + '" id="' + key + '" class="'+type2class(key)+'" src="' + type2iconpath(key) + '"></li>');
+        var img = $('<img id="' + key + '" class="'+type2class(key)+'" src="' + type2iconpath(key) + '"></li>');
+        var li = $('<li><span class="legend">'+type2title(key)+'</li>');
+        li.append(img);
         img.click(function() {
             toggleLayer($(this).attr("id"));
         });
-        var li = $("<li></li>");
-        li.append(img);
         $("#toolbar").append(li);
     }
 }

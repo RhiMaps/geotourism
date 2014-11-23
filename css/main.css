@@ -26,14 +26,34 @@ img.leaflet-marker-icon {
 }
 
 #toolbar img {
+    display: inline;
     background-color: lightgrey;
     border: solid white 1pt ;
     width: 29px;
     height: 29px;
 }
+
+#toolbar {
+    text-align: right;
+}
+
+#toolbar li{
+    vertical-align: middle;
+}
+#toolbar li:hover span {
+    display: inline;
+}
+#toolbar li span {
+    display: none;
+    background-color: white;
+    border: solid black 1pt ;
+    padding: 10px;
+    margin-right: 15px;
+}
 #toolbar li:hover img {
     background-color: white !important;
 }
+
 img.shade {
     background-color: darkgrey !important;
     border: solid black 1pt !important;
