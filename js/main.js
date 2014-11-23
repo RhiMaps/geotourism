@@ -1,4 +1,4 @@
-var z = 10;
+var z = 9;
 var myLL = L.latLng(43.03, 2.48);
 var defaultColor = "#ff7800";
 var defaultIcon = "default";
@@ -53,7 +53,7 @@ var typesTable = {
     'ruins': {
         color: 'blue',
         title: 'Ruines',
-        show: true
+        show: false
     },
     'camp_site': {
         color: '#0f0',
