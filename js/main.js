@@ -298,7 +298,7 @@ var audeContourLayer = L.geoJson.ajax('data/aude.json', {
         "opacity": "1",
         "weight": "2",
         "color": "green",
-        "fillOpacity": "0.1",
+        "fillOpacity": "0.05",
         "fillColor": "yellow",
     }
 }).addTo(map);
