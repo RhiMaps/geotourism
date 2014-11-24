@@ -15,43 +15,48 @@ img.leaflet-marker-icon {
 #toolbar { 
     margin: 0px;
     padding: 0px;
-    /*
-    border: solid grey 3px;
-    */
     position: absolute;
     z-index: 20;
     top: 200px;
-    right: 15px;
+    right: 0;
     list-style: none;
-}
-
-#toolbar img {
-    display: inline;
-    background-color: lightgrey;
-    border: solid white 1pt ;
-    width: 29px;
-    height: 29px;
-}
-
-#toolbar {
     text-align: right;
 }
 
 #toolbar li{
+    margin: 3px;
+    padding: 0;
     vertical-align: middle;
 }
-#toolbar li:hover span {
+
+#toolbar img {
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
+    border-radius: 4px;
+    margin-right: 10px;
     display: inline;
+    background-color: lightgrey;
+    border: solid white 1pt ;
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
 }
+
 #toolbar li span {
+    border-radius: 4px;
     display: none;
     background-color: white;
     border: solid black 1pt ;
-    padding: 10px;
+    padding: 5px;
+    margin: 0;
     margin-right: 15px;
 }
+
 #toolbar li:hover img {
     background-color: white !important;
+}
+
+#toolbar li:hover span {
+    display: inline;
 }
 
 img.shade {
