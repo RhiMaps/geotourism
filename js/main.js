@@ -1,4 +1,7 @@
 var z = 9;
+var southWest = L.latLng(42.56, 0.28),
+    northEast = L.latLng(43.50, 4.68),
+    bounds = L.latLngBounds(southWest, northEast);
 var myLL = L.latLng(43.03, 2.48);
 var defaultColor = "#ff7800";
 var defaultIcon = "default";
@@ -113,9 +116,9 @@ function feature2type(feature) {
 }
 
 function type2class(type) {
-    var returnedClass="shade";
-    if(  typesTable[type] && typesTable[type].show  ){
-        returnedClass="high";
+    var returnedClass = "shade";
+    if (typesTable[type] && typesTable[type].show) {
+        returnedClass = "high";
     }
     return returnedClass;
 }
@@ -139,15 +142,15 @@ function feature2popup(feature) {
         //if (feature.properties.historic) {
         //    popupcontent += "historic: " + feature.properties.historic;
         //}
-        if (feature.properties["@id"] && "node/1753876165"==feature.properties["@id"]){
+        if (feature.properties["@id"] && "node/1753876165" == feature.properties["@id"]) {
             popupcontent += '<a href="http://fr.wikipedia.org/wiki/Belcastel-et-Buc">Belcastel-et-Buc sur wikipedia</a>';
             popupcontent += '<img src="data/photos/belcastel.jpg" class="poimg"/>';
         }
-        if (feature.properties["@id"] && "node/1753686821"==feature.properties["@id"]){
+        if (feature.properties["@id"] && "node/1753686821" == feature.properties["@id"]) {
             popupcontent += '<a href="http://www.audecathare.fr/abbayes/eglise_saint_polycarpe.htm">Saint Polycarpe sur audecathare.fr</a>';
             popupcontent += '<img src="data/photos/polycarpe.jpg" class="poimg"/>';
         }
-        if (feature.properties["@id"] && "node/1805880699"==feature.properties["@id"]){
+        if (feature.properties["@id"] && "node/1805880699" == feature.properties["@id"]) {
             popupcontent += '<a href="http://fr.wikipedia.org/wiki/Abbaye_d%27Alet-les-Bains">L\'abbaye sur wikipedia</a>';
             popupcontent += '<img src="data/photos/alet.jpg" class="poimg"/>';
         }
@@ -161,7 +164,8 @@ var map = L.map('map', {
     center: myLL,
     zoom: z,
     maxZoom: 17,
-    minZoom: 9
+    minZoom: 9,
+    maxBounds: bounds,
 });
 
 // add an OpenStreetMap tile layer
@@ -228,8 +232,8 @@ function onEachFeature(feature, featureLayer) {
         lg = new L.layerGroup();
         //store layer
         mapLayerGroups[featureType] = lg;
-        if(  typesTable[featureType] && typesTable[featureType].show  ){
-            console.log( featureType+" allowed ("+typesTable[featureType].show+")");
+        if (typesTable[featureType] && typesTable[featureType].show) {
+            console.log(featureType + " allowed (" + typesTable[featureType].show + ")");
             // add type to selected
             selectedLayers[featureType] = 1;
             //add the layer to the map
@@ -379,7 +383,7 @@ function toggleLayer(id) {
         hideLayer(id);
         delete selectedLayers[id];
     }
-    $("#"+id).toggleClass("shade");
+    $("#" + id).toggleClass("shade");
 }
 
 /*
@@ -388,8 +392,8 @@ function toggleLayer(id) {
  */
 function fillToolBar() {
     for (var key in typesTable) {
-        var img = $('<img id="' + key + '" class="'+type2class(key)+'" src="' + type2iconpath(key) + '"></li>');
-        var li = $('<li><span class="legend">'+type2title(key)+'</li>');
+        var img = $('<img id="' + key + '" class="' + type2class(key) + '" src="' + type2iconpath(key) + '"></li>');
+        var li = $('<li><span class="legend">' + type2title(key) + '</li>');
         li.append(img);
         img.click(function() {
             toggleLayer($(this).attr("id"));
@@ -399,7 +403,4 @@ function fillToolBar() {
 }
 
 
-//map.fitBounds(audeContourLayer.getBounds());
-map.setMaxBounds(map.getBounds());
-//map.options.minZoom = map.getZoom();
 fillToolBar();
