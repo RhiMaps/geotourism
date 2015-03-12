@@ -1,7 +1,4 @@
 var z = 9;
-var southWest = L.latLng(42.56, 0.28),
-    northEast = L.latLng(43.50, 4.68),
-    bounds = L.latLngBounds(southWest, northEast);
 var myLL = L.latLng(43.03, 2.48);
 var defaultColor = "#ff7800";
 var defaultIcon = "default";
@@ -164,8 +161,7 @@ var map = L.map('map', {
     center: myLL,
     zoom: z,
     maxZoom: 17,
-    minZoom: 9,
-    maxBounds: bounds,
+    minZoom: 9
 });
 
 // add an OpenStreetMap tile layer
