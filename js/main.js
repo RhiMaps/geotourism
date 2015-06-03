@@ -312,6 +312,17 @@ var limouxinLayer = L.geoJson.ajax('data/limouxin.json', {
         "weight": "2",
         "color": "black",
     }
+});
+
+var couizaLayer = L.geoJson.ajax('data/pays-de-couiza.json', {
+    smoothFactor: "1",
+    style: {
+        "fillOpacity": "0.1",
+        "fillColor": "#800000",
+        "opacity": "0.5",
+        "weight": "2",
+        "color": "black",
+    }
 }).addTo(map);
 
 var baseLayers = {
@@ -327,7 +338,8 @@ var baseLayers = {
 //
 var overLays = {
     "Aude": audeContourLayer,
-    "Limouxin": limouxinLayer
+    "Limouxin": limouxinLayer,
+    "Couiza": couizaLayer
 };
 
 // Layers switchers
