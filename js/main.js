@@ -1,4 +1,4 @@
-var z = 9;
+var z = 10;
 var myLL = L.latLng(43.03, 2.48);
 var defaultColor = "#ff7800";
 var defaultIcon = "default";
@@ -150,6 +150,10 @@ function feature2popup(feature) {
         if (feature.properties["@id"] && "node/1805880699" == feature.properties["@id"]) {
             popupcontent += '<a href="http://fr.wikipedia.org/wiki/Abbaye_d%27Alet-les-Bains">L\'abbaye sur wikipedia</a>';
             popupcontent += '<img src="data/photos/alet.jpg" class="poimg"/>';
+        }
+        if (feature.properties["@id"] && "node/597728318" == feature.properties["@id"]) {
+            popupcontent += '<a href="http://fr.wikipedia.org/wiki/Ch%C3%A2teau_de_Coustaussa">Coustaussa  sur wikipedia</a>';
+            popupcontent += '<img src="data/photos/coustaussa.jpg" class="poimg"/>';
         }
     }
     return popupcontent;
@@ -317,7 +321,7 @@ var limouxinLayer = L.geoJson.ajax('data/limouxin.json', {
 var couizaLayer = L.geoJson.ajax('data/pays-de-couiza.json', {
     smoothFactor: "1",
     style: {
-        "fillOpacity": "0.1",
+        "fillOpacity": "0.5",
         "fillColor": "#800000",
         "opacity": "0.5",
         "weight": "2",
